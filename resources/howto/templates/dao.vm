@@ -1,0 +1,19 @@
+#parse("copyright.vm")
+package ${table.DAOPackage};
+
+#foreach($importClass in $table.daoImports) 
+import $importClass;
+
+#end
+
+/**
+ * A dao interface provides methods to access database table <tt>$table.sqlName</tt>.
+ */
+public interface ${table.DAOClassName} extends BaseDAO {
+#set ($daoName = ${table.DAOClassName})
+##parse("dao-name.vm")
+#foreach($operation in $table.operations)
+#parse("operation/op-${operation.templateSuffix}.vm");
+
+#end
+}

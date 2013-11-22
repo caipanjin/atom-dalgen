@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tables>
+	<typemap from="java.sql.Date" to="java.util.Date" />
+	<typemap from="java.sql.Timestamp" to="java.util.Date" />
+	<typemap from="java.math.BigDecimal" to="long" />
+	<typemap from="byte" to="int" />
+	<typemap from="short" to="int" />
+    
+    <tableprefix prefix="mplat" />
+
+    <include table="tables/mplat_exam_info.xml" />
+    <include table="tables/mplat_exam_item.xml" />
+    <include table="tables/mplat_user_info.xml" />
+</tables>

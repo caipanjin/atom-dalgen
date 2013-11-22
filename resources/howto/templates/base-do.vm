@@ -1,0 +1,16 @@
+#parse("copyright.vm")
+package ${plugin.baseDOPackage};
+
+import com.atom.core.lang.ToString;
+
+/**
+ * Base class for all data objects.
+ */
+public abstract class BaseDO extends ToString {
+
+	/**
+	 * Fetch data object id.
+	 */
+	public abstract long getId();
+
+}
