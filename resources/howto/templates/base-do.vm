@@ -1,12 +1,13 @@
 #parse("copyright.vm")
 package ${plugin.baseDOPackage};
 
-import com.atom.core.lang.ToString;
+import com.github.obullxl.lang.ToString;
 
 /**
  * Base class for all data objects.
  */
 public abstract class BaseDO extends ToString {
+	private static final long serialVersionUID = 2534171338675523870L;
 
 	/**
 	 * Fetch data object id.

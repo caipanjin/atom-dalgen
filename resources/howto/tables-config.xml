@@ -6,9 +6,8 @@
 	<typemap from="byte" to="int" />
 	<typemap from="short" to="int" />
     
+    <tableprefix prefix="atom" />
     <tableprefix prefix="mplat" />
 
-    <include table="tables/mplat_exam_info.xml" />
-    <include table="tables/mplat_exam_item.xml" />
-    <include table="tables/mplat_user_info.xml" />
+    <include table="tables/atom_topic.xml" />
 </tables>

@@ -101,7 +101,7 @@
 
 #end
 #else
-    <${operation.mappedStatementType} id="${operation.mappedStatementId}" #if($!{operation.getParameterClass()}) parameterClass = "$!{operation.getParameterClass()}" #end>
+    <${operation.mappedStatementType} id="${operation.mappedStatementId}" #if($!{operation.getParameterClass()}) parameterClass="$!{operation.getParameterClass()}" #end>
 #if (${operation.hasSqlmap})
         $operation.mappedStatementSql
 #else

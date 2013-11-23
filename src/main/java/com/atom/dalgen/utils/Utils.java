@@ -7,6 +7,7 @@ package com.atom.dalgen.utils;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * 工具类
  * 
  * @author shizihu
  * @version $Id: Utils.java, v 0.1 2012-8-23 下午05:23:32 shizihu Exp $

@@ -12,12 +12,12 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 
 /**
- * Mcenter任务
+ * 任务测试
  * 
- * @author shizihu
- * @version $Id: McenterMain.java, v 0.1 2012-8-24 上午09:55:00 shizihu Exp $
+ * @author obullxl@gmail.com
+ * @version $Id: DalgenUseMain.java, V1.0.1 2013年11月22日 下午2:32:14 $
  */
-public final class McenterMain {
+public final class DalgenUseMain {
 
     /**
      * @param args
