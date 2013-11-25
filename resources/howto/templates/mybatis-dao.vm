@@ -1,0 +1,5 @@
+#if((${table.getTableConfig().bConfidentiality()} == true)||(${table.getTableConfig().bIntegrity()} == true))
+#parse("mybatis-dao-new.vm")
+#else
+#parse("mybatis-dao-old.vm")
+#end

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+#foreach ($table in $plugin.sortedTables)
+		<typeAlias alias="${table.baseClassName}DO" type="${table.package}.dal.dto.${table.baseClassName}DO"/>
+#end
+	</typeAliases>
+
+	<mappers>
+#foreach ($table in $plugin.sortedTables)
+		<mapper resource="mybatis/jeesite/${table.baseClassName}-mapper.xml" />
+#end
+	</mappers>
+</configuration>
