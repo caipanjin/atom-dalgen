@@ -11,8 +11,6 @@ import middlegen.plugins.iwallet.util.DalUtil;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.atom.dalgen.utils.LogUtils;
-
 /**
  * A decoration class for a dao operation parameter.
  *

@@ -1,5 +1,5 @@
 #parse("copyright.vm")
-package ${plugin.baseDAOPackage};
+package ${plugin.package}.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +8,5 @@ import org.slf4j.LoggerFactory;
  * Base interface for all data access objects.
  */
 public interface BaseDAO {
-    /** Logger */
     public static final Logger logger = LoggerFactory.getLogger(BaseDAO.class);
-
 }

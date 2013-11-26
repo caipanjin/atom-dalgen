@@ -367,9 +367,7 @@ public abstract class IWalletOperation extends PreferenceAware implements Operat
     protected void setupParams() {
         IWalletTable iwTable = (IWalletTable) getTable();
 
-        IWalletParameter param;
-
-        param = new IWalletParameter(this, iwTable.getSingularisedVariableName());
+        IWalletParameter param = new IWalletParameter(this, iwTable.getSingularisedVariableName());
 
         param.setPlugin(getPlugin());
         objectParams.add(param);
@@ -538,7 +536,6 @@ public abstract class IWalletOperation extends PreferenceAware implements Operat
     }
 
     public String getColumnType() {
-
         // 为了运行getFiled方法，只想到这种方法了
         this.getField();
 

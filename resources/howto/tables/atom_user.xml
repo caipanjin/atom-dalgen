@@ -28,7 +28,7 @@
 	<!-- ========================================== -->
 	<!-- 数据表操作 -->
 	<!-- ========================================== -->
-	<operation name="find" multiplicity="many">
+	<operation name="find" multiplicity="one">
 		<description>查询单条记录</description>
 		<sql>
 			SELECT * FROM atom_user WHERE id=?

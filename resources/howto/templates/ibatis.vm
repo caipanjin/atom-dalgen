@@ -1,5 +1,0 @@
-#if((${table.getTableConfig().bConfidentiality()} == true)||(${table.getTableConfig().bIntegrity()} == true))
-#parse("ibatis-new.vm")
-#else
-#parse("ibatis-old.vm")
-#end

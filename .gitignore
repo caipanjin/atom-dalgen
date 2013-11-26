@@ -13,3 +13,5 @@
 
 /target
 /resources/howto/target
+
+/resources/howto/*.log

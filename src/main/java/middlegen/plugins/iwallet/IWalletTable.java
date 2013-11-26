@@ -49,10 +49,10 @@ import com.atom.dalgen.utils.LogUtils;
 public class IWalletTable extends JavaTable implements Comparable {
     public static final String  DO_PATTERN        = "{0}DO";
     public static final String  DAO_PATTERN       = "{0}DAO";
-    public static final String  IBATIS_PATTERN    = "Ibatis{0}DAO";
-    public static final String  DO_PACKAGE        = "dataobject";
-    public static final String  DAO_PACKAGE       = "daointerface";
-    public static final String  IBATIS_PACKAGE    = "ibatis";
+    public static final String  IBATIS_PATTERN    = "MyBatis{0}DAO";
+    public static final String  DO_PACKAGE        = "dto";
+    public static final String  DAO_PACKAGE       = "dao";
+    public static final String  IBATIS_PACKAGE    = "mybatis";
     public static final String  RESULT_MAP_PREFIX = "RM-";
 
     //add by yuanxiao

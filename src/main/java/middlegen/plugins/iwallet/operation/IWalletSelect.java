@@ -258,7 +258,6 @@ public class IWalletSelect extends IWalletOperation {
      * @author lejin 
      */
     private void addImprotForGenericType() {
-
         String itemType = this.getColumnType();
         if (StringUtils.equals(itemType, "long") || StringUtils.equals(itemType, "int")) {
             //类型为long,int,则不需要增加导入;

@@ -1,5 +1,5 @@
 #parse("copyright.vm")
-package ${plugin.baseDOPackage};
+package ${plugin.package}.dto;
 
 import com.github.obullxl.lang.ToString;
 
@@ -8,10 +8,4 @@ import com.github.obullxl.lang.ToString;
  */
 public abstract class BaseDO extends ToString {
 	private static final long serialVersionUID = 2534171338675523870L;
-
-	/**
-	 * Fetch data object id.
-	 */
-	public abstract long getId();
-
 }

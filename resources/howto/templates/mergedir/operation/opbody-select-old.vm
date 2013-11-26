@@ -20,7 +20,7 @@
 
 #end
 #else
-        Map param = new HashMap();
+        Map<String, Object> param = new HashMap<String, Object>();
 
 #foreach ($param in ${operation.params})
 #if ($param.javaTypeForPrimitive)
@@ -44,10 +44,10 @@
 		    return retObj.${operation.simpleReturnType}Value();
 		}
 #else
-        return (${operation.simpleReturnType}) getSqlMapClientTemplate().queryForObject("${operation.mappedStatementId}", ${paramName});
+        return this.getSqlSession().selectOne("${operation.mappedStatementId}", ${paramName});
 #end
 #else
-        return getSqlMapClientTemplate().queryForList("${operation.mappedStatementId}", ${paramName});
+        return this.getSqlSession().selectList("${operation.mappedStatementId}", ${paramName});
 #end
 
 #else
@@ -55,7 +55,7 @@
         paginator.setItemsPerPage(pageSize);
         paginator.setPage(pageNum);
 
-        paginator.setItems(((Integer) getSqlMapClientTemplate().queryForObject("${operation.mappedStatementIdForCount}", ${paramName})).intValue());
+        paginator.setItems(((Integer) this.getSqlSession().selectOne("${operation.mappedStatementIdForCount}", ${paramName})).intValue());
         
         PageList  pageList = new PageList();
         pageList.setPaginator(paginator);
@@ -63,7 +63,7 @@
         if (paginator.getBeginIndex() <= paginator.getItems()) {
             ${paramName}.put("${operation.startRowName}", new Integer(paginator.getBeginIndex()));
             ${paramName}.put("${operation.endRowName}", new Integer(paginator.getEndIndex()));
-            pageList.addAll(getSqlMapClientTemplate().queryForList("${operation.mappedStatementId}", ${paramName}));
+            pageList.addAll(this.getSqlSession().selectList("${operation.mappedStatementId}", ${paramName}));
         }
         
         return pageList;

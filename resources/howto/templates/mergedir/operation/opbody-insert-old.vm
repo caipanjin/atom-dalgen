@@ -6,7 +6,7 @@
     	
 #if(${table.ticket})
         try {
-            ${operation.param.name}.${table.iwPkColumn.setterName}(this.mutexTicket.nextValue());
+            ${operation.param.name}.${table.iwPkColumn.setterName}(this.ticketService.nextValue());
         } catch (TicketException e) {
             throw new RuntimeException("Set TicketID exception.", e);
         }

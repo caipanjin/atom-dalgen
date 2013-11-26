@@ -38,26 +38,26 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id: IWalletPlugin.java,v 1.4 2006/09/18 12:43:50 zhaoxu Exp $
  */
 public class IWalletPlugin extends JavaPlugin {
-    
+
     /** the class name of Money */
-    public static final String  MONEY_CLASS                 = "com.iwallet.biz.common.util.money.Money";
+    public static final String MONEY_CLASS                 = "com.iwallet.biz.common.util.money.Money";
 
     /** the result map name for Money */
-    public static final String  MONEY_RESULT_MAP_ID         = "RM-MONEY";
+    public static final String MONEY_RESULT_MAP_ID         = "RM-MONEY";
 
     /** full qualified class name for Paginator */
-    public static final String  PAGINATOR_CLASS             = "com.alibaba.common.lang.Paginator";
+    public static final String PAGINATOR_CLASS             = "com.alibaba.common.lang.Paginator";
 
     /** full qualified class name for DataAccessException */
-    public static final String  DATA_ACCESS_EXCEPTION_CLASS = "org.springframework.dao.DataAccessException";
-    public static final String  BASE_DO_CLASS               = "BaseDO";
-    public static final String  BASE_DAO_CLASS               = "BaseDAO";
+    public static final String DATA_ACCESS_EXCEPTION_CLASS = "org.springframework.dao.DataAccessException";
+    public static final String BASE_DO_CLASS               = "BaseDO";
+    public static final String BASE_DAO_CLASS              = "BaseDAO";
 
     /** the time when the source code was generated, may be used to tag source code */
-    private Date                genTime;
+    private Date               genTime;
 
     /** a list of all sequences (instance of IWalletSeq) */
-    private List<IWalletSeq>    seqs                        = new ArrayList<IWalletSeq>();
+    private List<IWalletSeq>   seqs                        = new ArrayList<IWalletSeq>();
 
     /**
      * Constructor for IWalletPlugin.
@@ -230,7 +230,7 @@ public class IWalletPlugin extends JavaPlugin {
             return getPackage();
         }
     }
-    
+
     /**
      * @return
      */

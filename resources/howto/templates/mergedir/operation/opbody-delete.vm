@@ -20,7 +20,7 @@
 
 #end
 #else
-        Map param = new HashMap();
+        Map<String, Object> param = new HashMap<String, Object>();
 
 #foreach ($param in ${operation.params})
 #if ($param.javaTypeForPrimitive)
@@ -32,5 +32,5 @@
 #set ($paramName = "param")
 
 #end
-        return getSqlMapClientTemplate().delete("${operation.mappedStatementId}", ${paramName});
+        return this.getSqlSession().delete("${operation.mappedStatementId}", ${paramName});
     }
