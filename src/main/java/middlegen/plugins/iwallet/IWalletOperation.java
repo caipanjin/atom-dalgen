@@ -327,8 +327,7 @@ public abstract class IWalletOperation extends PreferenceAware implements Operat
 
     // added by yangyanzhao 2009-11-11
     public String addSqlAnnotation(String orgSql) {
-
-        String idAnnotation = " /*" + getMappedStatementId(true) + "*/ ";
+        String idAnnotation = " ";
         String[] searchStrs = new String[] { "select", "SELECT", "insert", "INSERT", "delete", "DELETE", "update", "UPDATE" };
         int startOperation = StringUtils.indexOfAny(orgSql, searchStrs);
         if (-1 != startOperation) {
@@ -524,7 +523,6 @@ public abstract class IWalletOperation extends PreferenceAware implements Operat
         // return false;
         // }
         return commaStart;
-
     }
 
     // add by yuanxiao --为了区分是select * 的情况

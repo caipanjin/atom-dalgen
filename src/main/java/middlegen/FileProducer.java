@@ -62,53 +62,54 @@ import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 
 import com.atom.dalgen.utils.LogUtils;
+import com.atom.dalgen.utils.Utils;
 
 /**
  * FileProducer objects hold all information required for the generation of one
  * file. Each FileProducer instance will generate one physical file.
  */
 public final class FileProducer {
-    private static final String              VALIDATOR_ROOT_PATH = "middlegen.validator.impl.";
+    private static final String       VALIDATOR_ROOT_PATH = "middlegen.validator.impl.";
 
     /**
      * @todo-javadoc Describe the field
      */
-    private File                             _destinationDir;
+    private File                      _destinationDir;
 
     /**
      * @todo-javadoc Describe the field
      */
-    private String                           _destinationFileName;
+    private String                    _destinationFileName;
 
     /**
      * @todo-javadoc Describe the field
      */
-    private URL                              _template;
+    private URL                       _template;
 
     /**
      * @todo-javadoc Describe the field
      */
-    private final Map<Object, Object>        _contexMap          = new HashMap<Object, Object>();
+    private final Map<Object, Object> _contexMap          = new HashMap<Object, Object>();
 
     /**
      * @todo-javadoc Describe the field
      */
-    private Map                              _tableElements      = new HashMap();
+    private Map                       _tableElements      = new HashMap();
 
     /**
      * @todo-javadoc Describe the field
      */
-    private String                           _id;
+    private String                    _id;
 
     /**
      * @todo-javadoc Describe the field
      */
-    private boolean                          _isCustom;
+    private boolean                   _isCustom;
 
     /**
      * @todo-javadoc Describe the field 用来在生成后做验证用 add by 张汤 2010-1-01-21，
      */
-    private String                           _validator;
+    private String                    _validator;
 
     public File getDestinationDir() {
         return _destinationDir;
@@ -287,24 +288,16 @@ public final class FileProducer {
             if (getId() != null) {
                 // Overriding an existing template
                 if (_destinationDir != null) {
-                    String msg = "In fileproducer with id=\""
-                                 + getId()
-                                 + "\", destination should *not* be specified. "
-                                 + "The fileproducer is overriding an existing template in the plugin, "
-                                 + "but the plugin should still decide where to store the generated file. "
-                                 + _destinationDir.getAbsolutePath();
+                    String msg = "In fileproducer with id=\"" + getId() + "\", destination should *not* be specified. " + "The fileproducer is overriding an existing template in the plugin, "
+                                 + "but the plugin should still decide where to store the generated file. " + _destinationDir.getAbsolutePath();
 
                     LogUtils.get().error(msg);
                     throw new IllegalStateException(msg);
                 }
 
                 if (_destinationFileName != null) {
-                    String msg = "In fileproducer with id=\""
-                                 + getId()
-                                 + "\", filename should *not* be specified. "
-                                 + "The fileproducer is overriding an existing template in the plugin, "
-                                 + "but the plugin should still decide how to name the generated file. "
-                                 + _destinationFileName;
+                    String msg = "In fileproducer with id=\"" + getId() + "\", filename should *not* be specified. " + "The fileproducer is overriding an existing template in the plugin, "
+                                 + "but the plugin should still decide how to name the generated file. " + _destinationFileName;
 
                     LogUtils.get().error(msg);
                     throw new IllegalStateException(msg);
@@ -321,7 +314,7 @@ public final class FileProducer {
                 if (_destinationDir == null) {
                     String msg = "Please specify the filename attribute in the fileproducer.";
 
-                     LogUtils.get().error(msg);
+                    LogUtils.get().error(msg);
                     throw new IllegalStateException(msg);
                 }
             }
@@ -357,8 +350,7 @@ public final class FileProducer {
      * @exception MiddlegenException
      *                Describe the exception
      */
-    public void generateForTable(VelocityEngine velocityEngine, TableDecorator tableDecorator)
-                                                                                              throws MiddlegenException {
+    public void generateForTable(VelocityEngine velocityEngine, TableDecorator tableDecorator) throws MiddlegenException {
         // possibly use a deeper destination dir (typically for java classes)
         File destinationDir = new File(_destinationDir, tableDecorator.getSubDirPath());
         if (tableDecorator instanceof IWalletTable) {
@@ -368,8 +360,7 @@ public final class FileProducer {
             getMethod(tableDecorator, conf, integ);
 
         }
-        String destinationFileName = MessageFormat.format(_destinationFileName,
-            new Object[] { tableDecorator.getReplaceName() });
+        String destinationFileName = MessageFormat.format(_destinationFileName, new Object[] { tableDecorator.getReplaceName() });
         File outputFile = new File(destinationDir, destinationFileName);
         getContextMap().put("table", tableDecorator);
 
@@ -379,10 +370,8 @@ public final class FileProducer {
     /**
      * 为SOFA提供
      */
-    public void generateTableForSofa(VelocityEngine velocityEngine, TableDecorator tableDecorator)
-                                                                                                  throws MiddlegenException {
-        String destinationFileName = MessageFormat.format(_destinationFileName,
-            new Object[] { tableDecorator.getReplaceName() });
+    public void generateTableForSofa(VelocityEngine velocityEngine, TableDecorator tableDecorator) throws MiddlegenException {
+        String destinationFileName = MessageFormat.format(_destinationFileName, new Object[] { tableDecorator.getReplaceName() });
 
         File outputFile = new File(_destinationDir, destinationFileName);
         if (tableDecorator instanceof IWalletTable) {
@@ -409,8 +398,7 @@ public final class FileProducer {
      * @exception MiddlegenException
      *                Describe the exception
      */
-    public void generateForTables(VelocityEngine velocityEngine, Collection tableDecorators)
-                                                                                            throws MiddlegenException {
+    public void generateForTables(VelocityEngine velocityEngine, Collection tableDecorators) throws MiddlegenException {
         File outputFile = new File(_destinationDir, _destinationFileName);
 
         ArrayList<IWalletTable> list = (ArrayList<IWalletTable>) tableDecorators;
@@ -496,17 +484,19 @@ public final class FileProducer {
             // Make a context from the map
             VelocityContext context = new VelocityContext(getContextMap());
 
+            for (Map.Entry<String, Object> entry : Utils.findUtils().entrySet()) {
+                context.put(entry.getKey(), entry.getValue());
+            }
+
             // Generate in a temporary place first
             File tempFile = File.createTempFile("middlegen", "tmp");
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
 
             // The template
-            Reader templateReader = new BufferedReader(
-                new InputStreamReader(_template.openStream()));
+            Reader templateReader = new BufferedReader(new InputStreamReader(_template.openStream()));
 
-             LogUtils.get().info("Generating " + outputFile.getAbsolutePath() + " using template from "
-                      + _template.toString());
+            LogUtils.get().info("Generating " + outputFile.getAbsolutePath() + " using template from " + _template.toString());
 
             // Run Velocity
             boolean success = velocityEngine.evaluate(context, writer, "middlegen", templateReader);
@@ -517,10 +507,10 @@ public final class FileProducer {
             if (!success) {
                 throw new MiddlegenException("Velocity failed");
             }
-            
+
             //sql注入漏洞验证
             // sqlInjectionValidate(tempFile);
-            
+
             // Compare to see if the new file is the same as the original one.
             if (!outputFile.exists()) {
                 outputFile.getParentFile().mkdirs();
@@ -538,23 +528,22 @@ public final class FileProducer {
                 tempFile.delete();
             }
         } catch (IOException e) {
-             LogUtils.get().error(e.getMessage(), e);
+            LogUtils.get().error(e.getMessage(), e);
             throw new MiddlegenException(e.getMessage());
         } catch (ParseErrorException e) {
-             LogUtils.get().error(e.getMessage(), e);
+            LogUtils.get().error(e.getMessage(), e);
             throw new MiddlegenException(e.getMessage());
         } catch (MethodInvocationException e) {
-             LogUtils.get().error(e.getMessage(), e);
+            LogUtils.get().error(e.getMessage(), e);
             throw new MiddlegenException(e.getMessage());
         } catch (ResourceNotFoundException e) {
-             LogUtils.get().error(e.getMessage(), e);
+            LogUtils.get().error(e.getMessage(), e);
             e.printStackTrace();
             throw new MiddlegenException(e.getMessage());
         }
     }
 
-    private void generateAfterValidate(File generatedFile, File replacedFile)
-                                                                             throws MiddlegenException {
+    private void generateAfterValidate(File generatedFile, File replacedFile) throws MiddlegenException {
         if (StringUtils.isNotBlank(this._validator)) {
             Validator validator = null;
             try {
@@ -564,14 +553,12 @@ public final class FileProducer {
                 // 删除生成的临时文件
                 generatedFile.delete();
 
-                 LogUtils.get().error(e.getMessage(), e);
+                LogUtils.get().error(e.getMessage(), e);
                 e.printStackTrace();
-                throw new MiddlegenException("不能创建" + this._validator + "的实例,请检查build.xml配置是否正确，确保"
-                                             + this._validator + "存在,详细信息：" + e.getMessage());
+                throw new MiddlegenException("不能创建" + this._validator + "的实例,请检查build.xml配置是否正确，确保" + this._validator + "存在,详细信息：" + e.getMessage());
             }
 
-            List<ErrorMessage> validateResults = validator.validateAfterGenerate(generatedFile,
-                replacedFile, this);
+            List<ErrorMessage> validateResults = validator.validateAfterGenerate(generatedFile, replacedFile, this);
             if (validateResults != null && validateResults.size() > 0) {
                 // 删除生成的临时文件
                 generatedFile.delete();
@@ -581,8 +568,7 @@ public final class FileProducer {
                     messages.append("\n").append(msg);
                 }
                 LogUtils.get().error(messages.toString());
-                throw new MiddlegenException("执行" + this._validator + "验证失败,详细信息："
-                                             + messages.toString());
+                throw new MiddlegenException("执行" + this._validator + "验证失败,详细信息：" + messages.toString());
             }
         }
     }
@@ -594,33 +580,31 @@ public final class FileProducer {
      * @param tmpFile
      * @throws MiddlegenException
      */
-//    private void sqlInjectionValidate(File tmpFile) throws MiddlegenException {
-//        try {
-//            if (this.getDestinationFileName().endsWith("mapping.xml")) {
-//                BufferedReader br = new BufferedReader(new FileReader(tmpFile));
-//                String line = null;
-//                for (line = br.readLine(); line != null; line = br.readLine()) {
-//                    if (StringUtils.contains(line, '$')) {
-//                        String msg = "生成sqlmap不允许出现\"$\"符,模糊查询oracle中请写成'%'||#变量名#||‘%’,mysql中请写成concat('%',#name #,'%')";
-//                        throw new MiddlegenException(msg);
-//                    }
-//                }
-//            }
-//        } catch (Exception e) {
-//            throw new MiddlegenException("sql注入漏洞验证异常：" + e.getLocalizedMessage());
-//        }
-//    }
+    //    private void sqlInjectionValidate(File tmpFile) throws MiddlegenException {
+    //        try {
+    //            if (this.getDestinationFileName().endsWith("mapping.xml")) {
+    //                BufferedReader br = new BufferedReader(new FileReader(tmpFile));
+    //                String line = null;
+    //                for (line = br.readLine(); line != null; line = br.readLine()) {
+    //                    if (StringUtils.contains(line, '$')) {
+    //                        String msg = "生成sqlmap不允许出现\"$\"符,模糊查询oracle中请写成'%'||#变量名#||‘%’,mysql中请写成concat('%',#name #,'%')";
+    //                        throw new MiddlegenException(msg);
+    //                    }
+    //                }
+    //            }
+    //        } catch (Exception e) {
+    //            throw new MiddlegenException("sql注入漏洞验证异常：" + e.getLocalizedMessage());
+    //        }
+    //    }
 
     private void getMethod(TableDecorator tableDecorator, String conf, String integ) {
         //对操作的每一条进行判定,用于select count(*)的情况
-        List<IWalletOperationConfig> list = ((IWalletTable) tableDecorator).getTableConfig()
-            .getOperations();
+        List<IWalletOperationConfig> list = ((IWalletTable) tableDecorator).getTableConfig().getOperations();
         for (int i = 0; i < list.size(); i++) {
             String sql = list.get(0).getSql();
             int indexFrom = StringUtils.indexOfAny(sql, new String[] { "from", "FROM" });
             String sqlFrom = StringUtils.substring(sql, 0, indexFrom);
-            int indexCount = StringUtils.indexOfAny(sqlFrom,
-                new String[] { "count(*)", "COUNT(*)" });
+            int indexCount = StringUtils.indexOfAny(sqlFrom, new String[] { "count(*)", "COUNT(*)" });
             if (indexCount > 0) {
                 getContextMap().put("countall", true);
             } else

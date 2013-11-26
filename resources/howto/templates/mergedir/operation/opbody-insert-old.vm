@@ -12,7 +12,7 @@
         }
 #end
 
-        getSqlMapClientTemplate().insert("${operation.mappedStatementId}", ${operation.param.name});
+        this.getSqlSession().insert("${table.namespace}.${operation.name}", ${operation.param.name});
 
         return ${operation.param.name}.${table.iwPkColumn.getterName}();
 #else

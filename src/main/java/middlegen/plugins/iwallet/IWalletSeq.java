@@ -123,7 +123,7 @@ public class IWalletSeq implements Operation {
      * @see middlegen.plugins.iwallet.Operation#getParsedSql()
      */
     public String getParsedSql() {
-        return "select " + getName() + "." + "nextval from dual";
+        return "SELECT " + getName() + "." + "nextval FROM dual";
     }
 
     /**

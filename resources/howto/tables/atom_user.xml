@@ -28,6 +28,13 @@
 	<!-- ========================================== -->
 	<!-- 数据表操作 -->
 	<!-- ========================================== -->
+	<operation name="count">
+		<description>统计记录总条数</description>
+		<sql>
+			SELECT COUNT(*) FROM atom_user
+		</sql>
+	</operation>
+	
 	<operation name="find" multiplicity="one">
 		<description>查询单条记录</description>
 		<sql>

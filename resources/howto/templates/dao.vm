@@ -1,5 +1,5 @@
 #parse("copyright.vm")
-package ${table.package}.dao;
+package ${table.package}.dal.dao;
 
 #foreach($importClass in $table.daoImports) 
 import $importClass;

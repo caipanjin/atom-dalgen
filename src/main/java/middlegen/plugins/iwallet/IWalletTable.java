@@ -7,9 +7,11 @@ package middlegen.plugins.iwallet;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import middlegen.Column;
 import middlegen.Plugin;
@@ -47,38 +49,41 @@ import com.atom.dalgen.utils.LogUtils;
  * @version $Id: IWalletTable.java,v 1.3 2005/09/05 09:01:14 lusu Exp $
  */
 public class IWalletTable extends JavaTable implements Comparable {
-    public static final String  DO_PATTERN        = "{0}DO";
-    public static final String  DAO_PATTERN       = "{0}DAO";
-    public static final String  IBATIS_PATTERN    = "MyBatis{0}DAO";
-    public static final String  DO_PACKAGE        = "dto";
-    public static final String  DAO_PACKAGE       = "dao";
-    public static final String  IBATIS_PACKAGE    = "mybatis";
-    public static final String  RESULT_MAP_PREFIX = "RM-";
+    public static final String DO_PATTERN        = "{0}DO";
+    public static final String DAO_PATTERN       = "{0}DAO";
+    public static final String IBATIS_PATTERN    = "MyBatis{0}DAO";
+    public static final String DO_PACKAGE        = "dal.dto";
+    public static final String DAO_PACKAGE       = "dal.dao";
+    public static final String IBATIS_PACKAGE    = "dal.mybatis";
+    public static final String RESULT_MAP_PREFIX = "RM-";
 
     //add by yuanxiao
-    public static final String  UTILS_PACKAGE     = "utils";
-    public static final String  UTILS_PATTERN     = "{0}Utils";
+    public static final String UTILS_PACKAGE     = "utils";
+    public static final String UTILS_PATTERN     = "{0}Utils";
 
     /** the table config corresponding to the table */
-    private IWalletTableConfig  tableConfig;
+    private IWalletTableConfig tableConfig;
 
     /** a list of all result maps */
-    private List                resultMaps        = new ArrayList();
+    private List               resultMaps        = new ArrayList();
 
     /** a map make look up result map by name quick */
-    private Map                 resultMapIndex    = new HashMap();
+    private Map                resultMapIndex    = new HashMap();
 
     /** a list of all operation decorators */
-    private List                operations        = new ArrayList();
+    private List               operations        = new ArrayList();
 
     /** a list of all dataobject imports */
-    private List                doImports         = new ArrayList();
+    private Set<String>        doImports         = new HashSet<String>();
 
     /** a list of all dao imports */
-    private List                daoImports        = new ArrayList();
+    private Set<String>        daoImports        = new HashSet<String>();
 
     /** a list of all ibatis imports */
-    private List                ibatisImports     = new ArrayList();
+    private Set<String>        ibatisImports     = new HashSet<String>();
+
+    /** a list of all ibatis imports */
+    private Set<String>        myBatisImports    = new HashSet<String>();
 
     /**
      * Constructor for IWalletTableDecorator.
@@ -183,7 +188,7 @@ public class IWalletTable extends JavaTable implements Comparable {
     public List<IWalletSqlConfig> getSqls() {
         return this.tableConfig.getSqls();
     }
-    
+
     /**
      * Gets all operations
      *
@@ -203,7 +208,7 @@ public class IWalletTable extends JavaTable implements Comparable {
     /**
      * @return
      */
-    public List getDoImports() {
+    public Set<String> getDoImports() {
         return doImports;
     }
 
@@ -217,21 +222,21 @@ public class IWalletTable extends JavaTable implements Comparable {
     /**
      * @param type
      */
-    public void addDoImports(List list) {
+    public void addDoImports(List<String> list) {
         addImports(doImports, list);
     }
 
     /**
      * @param type
      */
-    public void addDaoImports(List list) {
+    public void addDaoImports(List<String> list) {
         addImports(daoImports, list);
     }
 
     /**
      * @return
      */
-    public List getDaoImports() {
+    public Set<String> getDaoImports() {
         return daoImports;
     }
 
@@ -242,18 +247,19 @@ public class IWalletTable extends JavaTable implements Comparable {
         addImport(ibatisImports, type);
     }
 
-    /**
-     * @param type
-     */
-    public void addIbatisImports(List list) {
+    public void addIbatisImports(List<String> list) {
         addImports(ibatisImports, list);
     }
 
-    /**
-     * @return
-     */
-    public List getIbatisImports() {
+    public Set<String> getIbatisImports() {
         return ibatisImports;
+    }
+ 
+    public Set<String> getMyBatisImports() {
+        myBatisImports.addAll(this.daoImports);
+        myBatisImports.addAll(this.ibatisImports);
+        
+        return myBatisImports;
     }
 
     /**
@@ -263,12 +269,7 @@ public class IWalletTable extends JavaTable implements Comparable {
         addImport(daoImports, type);
     }
 
-    /**
-     *
-     * @param list
-     * @param type
-     */
-    protected void addImport(List list, String type) {
+    protected void addImport(Set<String> list, String type) {
         if (middlegen.plugins.iwallet.util.DalUtil.isNeedImport(type)) {
             if (!list.contains(type)) {
                 list.add(type);
@@ -276,20 +277,13 @@ public class IWalletTable extends JavaTable implements Comparable {
         }
     }
 
-    /**
-     *
-     * @param list
-     * @param type
-     */
-    protected void addImports(List list, List typeList) {
+    protected void addImports(Set<String> list, List<String> typeList) {
         for (int i = 0; i < typeList.size(); i++) {
-            addImport(list, (String) typeList.get(i));
+            addImport(list, typeList.get(i));
         }
     }
 
     /**
-     *
-     *
      * @see middlegen.PreferenceAware#init()
      */
     protected void init() {
@@ -332,8 +326,7 @@ public class IWalletTable extends JavaTable implements Comparable {
         Iterator i = tableConfig.getResultMaps().iterator();
 
         while (i.hasNext()) {
-            IWalletResultMap resultMap = new IWalletResultMap(this, (IWalletResultMapConfig) i
-                .next());
+            IWalletResultMap resultMap = new IWalletResultMap(this, (IWalletResultMapConfig) i.next());
 
             resultMaps.add(resultMap);
             resultMapIndex.put(resultMap.getIdAttr(), resultMap);
@@ -378,8 +371,7 @@ public class IWalletTable extends JavaTable implements Comparable {
      * @return
      */
     public String getResultMapId() {
-        return RESULT_MAP_PREFIX
-               + middlegen.plugins.iwallet.util.DalUtil.toUpperCaseWithDash(getBaseClassName());
+        return RESULT_MAP_PREFIX + middlegen.plugins.iwallet.util.DalUtil.toUpperCaseWithDash(getBaseClassName());
     }
 
     /**
@@ -503,7 +495,7 @@ public class IWalletTable extends JavaTable implements Comparable {
     public boolean getDrmConfig() {
         return tableConfig.getDrmConfig();
     }
-    
+
     public boolean isTicket() {
         return tableConfig.isTicket();
     }

@@ -42,8 +42,7 @@ public class IWalletSelect extends IWalletOperation {
         super(conf);
 
         //向下兼容，当没有配置机密性及完整性时，不进行SQL拼接
-        if ((opConfig.getTableConfig().getConfidentiality() != null)
-            || (opConfig.getTableConfig().getIntegrity() != null)) {
+        if ((opConfig.getTableConfig().getConfidentiality() != null) || (opConfig.getTableConfig().getIntegrity() != null)) {
             getFinalSql(opConfig);
         }
 
@@ -102,12 +101,10 @@ public class IWalletSelect extends IWalletOperation {
             sb.append(ret);
 
             if (opConfig.getTableConfig().getConfidentiality() != null) {
-                sb.append(",").append(opConfig.getTableConfig().getConfidentiality()).append(
-                    "_confidentiality");
+                sb.append(",").append(opConfig.getTableConfig().getConfidentiality()).append("_confidentiality");
             }
             if (opConfig.getTableConfig().getIntegrity() != null) {
-                sb.append(",").append(opConfig.getTableConfig().getIntegrity())
-                    .append("_integrity");
+                sb.append(",").append(opConfig.getTableConfig().getIntegrity()).append("_integrity");
             }
             sb.append(" from ").append(finalRet);
 
@@ -291,7 +288,7 @@ public class IWalletSelect extends IWalletOperation {
             } else if (IWalletPlugin.MONEY_CLASS.equals(result)) {
                 return "resultMap=\"" + IWalletPlugin.MONEY_RESULT_MAP_ID + "\"";
             } else {
-                return "resultClass=\"" + result + "\"";
+                return "resultType=\"" + result + "\"";
             }
         }
     }
@@ -311,15 +308,11 @@ public class IWalletSelect extends IWalletOperation {
         StringBuffer pagingSql = new StringBuffer();
 
         if (isHasSqlmap()) {
-            pagingSql.append("select /*" + getMappedStatementId(true) + "*/ * from (").append(
-                "select T1.*, rownum linenum from (").append(getMappedStatementSqlNoAnnotation())
-                .append(") T1 where rownum &lt;= #").append(getEndRowName()).append("#").append(
-                    ") T2 where linenum &gt;= #").append(getStartRowName()).append("#");
+            pagingSql.append("SELECT * FROM (").append("SELECT T1.*, rownum linenum FROM (").append(getMappedStatementSqlNoAnnotation()).append(") T1 WHERE rownum &lt;= #").append(getEndRowName())
+                .append("#").append(") T2 WHERE linenum &gt;= #").append(getStartRowName()).append("#");
         } else {
-            pagingSql.append("select /*" + getMappedStatementId(true) + "*/ * from (").append(
-                "select T1.*, rownum linenum from (").append(getMappedStatementSqlNoAnnotation())
-                .append(") T1 where rownum <= #").append(getEndRowName()).append("#").append(
-                    ") T2 where linenum >= #").append(getStartRowName()).append("#");
+            pagingSql.append("SELECT * from (").append("SELECT T1.*, rownum linenum FROM (").append(getMappedStatementSqlNoAnnotation()).append(") T1 WHERE rownum <= #").append(getEndRowName())
+                .append("#").append(") T2 WHERE linenum >= #").append(getStartRowName()).append("#");
         }
 
         return pagingSql.toString();
@@ -342,11 +335,9 @@ public class IWalletSelect extends IWalletOperation {
              * 由于mapped statement不是标准的SQL，因此很难进行彻底地分析。这里采取一种简单的方法，
              * 根据关键字和一些必要的假设来将原始的mapped statement中的一些部分直接替换或删除。
              */
-            int indexSelectStart = StringUtils.indexOfAny(origMs, new String[] { "select ",
-                    "SELECT " });
+            int indexSelectStart = StringUtils.indexOfAny(origMs, new String[] { "select ", "SELECT " });
             int indexSelectEnd = StringUtils.indexOfAny(origMs, new String[] { "from ", "FROM " });
-            int indexOrderByStart = StringUtils.indexOfAny(origMs, new String[] { "order by ",
-                    "ORDER BY " });
+            int indexOrderByStart = StringUtils.indexOfAny(origMs, new String[] { "order by ", "ORDER BY " });
             int indexOrderByEnd = 0;
 
             if (indexOrderByStart > 0) {
@@ -364,7 +355,7 @@ public class IWalletSelect extends IWalletOperation {
             StringBuffer ret = new StringBuffer();
 
             ret.append(StringUtils.substring(origMs, 0, indexSelectStart));
-            ret.append("select count(*) ");
+            ret.append("SELECT count(*) ");
             ret.append(StringUtils.substring(origMs, indexSelectEnd, indexOrderByStart));
 
             if ((indexOrderByStart < origMs.length()) && (indexOrderByEnd < origMs.length())) {
@@ -378,14 +369,12 @@ public class IWalletSelect extends IWalletOperation {
     }
 
     public String addSqlAnnotationForCount(String orgSql) {
-
-        String idAnnotation = " /*" + getMappedStatementIdForCount(true) + "*/ ";
+        String idAnnotation = " ";
         String[] searchStrs = new String[] { "select", "SELECT" };
         int startOperation = StringUtils.indexOfAny(orgSql, searchStrs);
         if (-1 != startOperation) {
             String operation = StringUtils.substring(orgSql, 0, startOperation + 6);
-            String afterOperation = StringUtils.substring(orgSql, startOperation + 7, orgSql
-                .length());
+            String afterOperation = StringUtils.substring(orgSql, startOperation + 7, orgSql.length());
             orgSql = operation + idAnnotation + afterOperation;
         }
         return orgSql;
@@ -410,7 +399,7 @@ public class IWalletSelect extends IWalletOperation {
 
         this.getMappedStatementIdForCount(true);
 
-        return "resultClass=\"int\"";
+        return "resultType=\"long\"";
     }
 
     /**

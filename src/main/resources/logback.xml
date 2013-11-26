@@ -9,11 +9,11 @@
 		</encoder>
 	</appender>
 
-	<logger name="LOGGER" level="INFO" additivity="false">
+	<logger name="LOGGER" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<root level="INFO">
+	<root level="DEBUG">
 		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="${table.sqlName}">
+<mapper namespace="${table.namespace}">
     <!-- ============================================= -->
     <!-- RESULT MAPS                                   -->
     <!-- ============================================= -->
@@ -10,7 +10,7 @@
 #foreach ($resultMap in ${table.resultMaps})
     <resultMap id="${resultMap.idAttr}" type="${table.baseClassName}DO">
 #foreach ($result in ${resultMap.results})
-        <result property="${result.property}" column="${result.column}" javaType="${result.javaType}" jdbcType="${result.jdbcType}" />
+        <result property="${result.property}" column="${result.column}" javaType="${result.javaType}" />
 #end
     </resultMap>
 
@@ -40,11 +40,11 @@
 #foreach ($operation in ${table.operations})
     <!-- mapped statement for ${table.ibatisClassName}.${operation.name} -->
 #if (${operation.mappedStatementType} == "insert")
-    <insert id="${operation.mappedStatementId}">
+    <insert id="${operation.name}">
 #if (${table.hasSequence} && ${table.iwPkColumn})
     <selectKey resultClass="${table.iwPkColumn.javaType}" keyProperty="${table.iwPkColumn.variableName}">
     <![CDATA[
-        select ${table.sequence}.nextval from dual
+        SELECT ${table.sequence}.nextval FROM dual
     ]]>
     </selectKey>
 #end
@@ -59,7 +59,7 @@
 
 #elseif (${operation.mappedStatementType} == "select")
 #if (${operation.paging})
-    <select id="${operation.mappedStatementId}" ${operation.mappedStatementResult}>
+    <select id="${operation.name}" ${operation.mappedStatementResult}>
 #if (${operation.hasSqlmap})
         $operation.mappedStatementSqlForPaging
 #else
@@ -82,7 +82,7 @@
     </select>
 
 #else
-    <select id="${operation.mappedStatementId}" ${operation.mappedStatementResult} #if($!{operation.getParameterClass()}) parameterClass = "$!{operation.getParameterClass()}" #end>
+    <select id="${operation.name}" ${operation.mappedStatementResult} #if($!{operation.getParameterClass()}) parameterClass = "$!{operation.getParameterClass()}" #end>
 #if (${operation.hasSqlmap})
         $operation.mappedStatementSql
 #else
@@ -94,7 +94,7 @@
 
 #end
 #else
-    <${operation.mappedStatementType} id="${operation.mappedStatementId}" #if($!{operation.getParameterClass()}) parameterClass="$!{operation.getParameterClass()}" #end>
+    <${operation.mappedStatementType} id="${operation.name}" #if($!{operation.getParameterClass()}) parameterClass="$!{operation.getParameterClass()}" #end>
 #if (${operation.hasSqlmap})
         $operation.mappedStatementSql
 #else

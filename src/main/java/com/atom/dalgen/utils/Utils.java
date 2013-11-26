@@ -4,6 +4,10 @@
  */
 package com.atom.dalgen.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -13,6 +17,20 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id: Utils.java, v 0.1 2012-8-23 下午05:23:32 shizihu Exp $
  */
 public final class Utils {
+
+    /**
+     * 工具类
+     */
+    public static Map<String, Object> findUtils() {
+        Map<String, Object> utils = new HashMap<String, Object>();
+
+        utils.put("IOUtils", new IOUtils());
+        utils.put("StringUtils", new StringUtils());
+        
+        utils.put("IndexUtils", new IndexUtils());
+        
+        return utils;
+    }
 
     /**
      * 将字符串转换成下划线分隔的大写字符串。
@@ -230,8 +248,7 @@ public final class Utils {
         }
 
         protected boolean isDelimiter(char ch) {
-            return !Character.isUpperCase(ch) && !Character.isLowerCase(ch)
-                   && !Character.isDigit(ch);
+            return !Character.isUpperCase(ch) && !Character.isLowerCase(ch) && !Character.isDigit(ch);
         }
 
         protected abstract void startSentence(StringBuffer buffer, char ch);
@@ -250,70 +267,40 @@ public final class Utils {
     }
 
     private static final WordTokenizer UPPER_CASE_WITH_UNDERSCORES_TOKENIZER = new WordTokenizer() {
-                                                                                 protected void startSentence(
-                                                                                                              StringBuffer buffer,
-                                                                                                              char ch) {
-                                                                                     buffer
-                                                                                         .append(Character
-                                                                                             .toUpperCase(ch));
+                                                                                 protected void startSentence(StringBuffer buffer, char ch) {
+                                                                                     buffer.append(Character.toUpperCase(ch));
                                                                                  }
 
-                                                                                 protected void startWord(
-                                                                                                          StringBuffer buffer,
-                                                                                                          char ch) {
-                                                                                     if (!isDelimiter(buffer
-                                                                                         .charAt(buffer
-                                                                                             .length() - 1))) {
-                                                                                         buffer
-                                                                                             .append(UNDERSCORE);
+                                                                                 protected void startWord(StringBuffer buffer, char ch) {
+                                                                                     if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
+                                                                                         buffer.append(UNDERSCORE);
                                                                                      }
 
-                                                                                     buffer
-                                                                                         .append(Character
-                                                                                             .toUpperCase(ch));
+                                                                                     buffer.append(Character.toUpperCase(ch));
                                                                                  }
 
-                                                                                 protected void inWord(
-                                                                                                       StringBuffer buffer,
-                                                                                                       char ch) {
-                                                                                     buffer
-                                                                                         .append(Character
-                                                                                             .toUpperCase(ch));
+                                                                                 protected void inWord(StringBuffer buffer, char ch) {
+                                                                                     buffer.append(Character.toUpperCase(ch));
                                                                                  }
 
-                                                                                 protected void startDigitSentence(
-                                                                                                                   StringBuffer buffer,
-                                                                                                                   char ch) {
-                                                                                     buffer
-                                                                                         .append(ch);
+                                                                                 protected void startDigitSentence(StringBuffer buffer, char ch) {
+                                                                                     buffer.append(ch);
                                                                                  }
 
-                                                                                 protected void startDigitWord(
-                                                                                                               StringBuffer buffer,
-                                                                                                               char ch) {
-                                                                                     if (!isDelimiter(buffer
-                                                                                         .charAt(buffer
-                                                                                             .length() - 1))) {
-                                                                                         buffer
-                                                                                             .append(UNDERSCORE);
+                                                                                 protected void startDigitWord(StringBuffer buffer, char ch) {
+                                                                                     if (!isDelimiter(buffer.charAt(buffer.length() - 1))) {
+                                                                                         buffer.append(UNDERSCORE);
                                                                                      }
 
-                                                                                     buffer
-                                                                                         .append(ch);
+                                                                                     buffer.append(ch);
                                                                                  }
 
-                                                                                 protected void inDigitWord(
-                                                                                                            StringBuffer buffer,
-                                                                                                            char ch) {
-                                                                                     buffer
-                                                                                         .append(ch);
+                                                                                 protected void inDigitWord(StringBuffer buffer, char ch) {
+                                                                                     buffer.append(ch);
                                                                                  }
 
-                                                                                 protected void inDelimiter(
-                                                                                                            StringBuffer buffer,
-                                                                                                            char ch) {
-                                                                                     buffer
-                                                                                         .append(ch);
+                                                                                 protected void inDelimiter(StringBuffer buffer, char ch) {
+                                                                                     buffer.append(ch);
                                                                                  }
                                                                              };
 

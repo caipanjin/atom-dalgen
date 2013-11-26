@@ -1,5 +1,5 @@
 #parse("copyright.vm")
-package ${plugin.package}.dao;
+package ${plugin.package}.dal.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

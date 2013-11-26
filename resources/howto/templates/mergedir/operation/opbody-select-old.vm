@@ -36,7 +36,7 @@
 #if (! ${operation.paging})
 #if (${operation.multiplicity} == "one")
 #if (${operation.returnTypePrimitive})
-	    ${operation.simpleReturnTypeForPrimitive} retObj = (${operation.simpleReturnTypeForPrimitive}) getSqlMapClientTemplate().queryForObject("${operation.mappedStatementId}", ${paramName});
+	    ${operation.simpleReturnTypeForPrimitive} retObj = (${operation.simpleReturnTypeForPrimitive}) this.getSqlSession().selectOne("${table.namespace}.${operation.name}", ${paramName});
 
 		if (retObj == null) {
 		    return ${operation.defaultReturnValue};
@@ -44,10 +44,10 @@
 		    return retObj.${operation.simpleReturnType}Value();
 		}
 #else
-        return this.getSqlSession().selectOne("${operation.mappedStatementId}", ${paramName});
+        return this.getSqlSession().selectOne("${table.namespace}.${operation.name}", ${paramName});
 #end
 #else
-        return this.getSqlSession().selectList("${operation.mappedStatementId}", ${paramName});
+        return this.getSqlSession().selectList("${table.namespace}.${operation.name}", ${paramName});
 #end
 
 #else
@@ -63,7 +63,7 @@
         if (paginator.getBeginIndex() <= paginator.getItems()) {
             ${paramName}.put("${operation.startRowName}", new Integer(paginator.getBeginIndex()));
             ${paramName}.put("${operation.endRowName}", new Integer(paginator.getEndIndex()));
-            pageList.addAll(this.getSqlSession().selectList("${operation.mappedStatementId}", ${paramName}));
+            pageList.addAll(this.getSqlSession().selectList("${table.namespace}.${operation.name}", ${paramName}));
         }
         
         return pageList;

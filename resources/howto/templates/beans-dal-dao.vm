@@ -7,27 +7,15 @@
     <!--  DAO配置 -->
     <!-- ====================================== -->
 #foreach ($table in $plugin.sortedTables)
-#set ($parent = "baseSqlMapClientDAO")
-#if (${table.isAutoSwitchDataSrc})
-#set ($parent = "autoSwitchDataSrcBaseSqlMapClientDAO")
-#end
-#if(${table.getTableConfig().getDrmConfig()} == true||(${table.getTableConfig().bConfidentiality()} == true)||(${table.getTableConfig().bIntegrity()} == true))
-    <bean id="${table.beanName}DAO" class="${table.package}.ibatis.Ibatis${table.baseClassName}DAO" parent="$parent" init-method="register">
-			<property name = "methodUtils" ref = "methodUtils"/>
-    </bean>
-	<bean id = "methodUtils" class = "${table.package}.utils.${table.baseClassName}Utils">
-		<property name = "kmiClient" ref ="kmiClient"/>
-	</bean>
-#else
-    <bean id="${table.beanName}DAO" class="${table.package}.ibatis.Ibatis${table.baseClassName}DAO" parent="$parent">
-    	#if(${table.ticket})<property name="mutexTicket">
-			<bean class="com.atom.core.ticket.support.DefaultMutexTicket" parent="baseMutexTicket">
+    <bean id="${table.beanName}DAO" parent="abstractDAO" class="${table.package}.dal.mybatis.MyBatis${table.baseClassName}DAO">
+#if(${table.ticket})
+		<property name="ticketService">
+			<bean class="com.github.obullxl.ticket.support.DefaultTicketService" parent="abstractTicket">
 				<property name="name" value="TB-${table.baseClassName}-ID" />
 			</bean>
-    	</property>#end
+    	</property>
+#end
     </bean>
-    
+	
 #end
-#end
-
 </beans>

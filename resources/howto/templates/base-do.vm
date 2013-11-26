@@ -1,5 +1,5 @@
 #parse("copyright.vm")
-package ${plugin.package}.dto;
+package ${plugin.package}.dal.dto;
 
 import com.github.obullxl.lang.ToString;
 

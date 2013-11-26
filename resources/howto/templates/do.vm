@@ -1,5 +1,5 @@
 #parse("copyright.vm")
-package ${table.package}.dto;
+package ${table.package}.dal.dto;
 
 // auto generated imports
 #foreach($importClass in $table.doImports) 

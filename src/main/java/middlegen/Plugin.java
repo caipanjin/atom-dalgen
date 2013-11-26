@@ -41,8 +41,6 @@ import java.util.Properties;
 
 import middlegen.plugins.iwallet.config.IWalletConfigException;
 import middlegen.plugins.iwallet.util.DalUtil;
-import middlegen.swing.JColumnSettingsPanel;
-import middlegen.swing.JTableSettingsPanel;
 
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
@@ -184,26 +182,6 @@ public class Plugin {
      */
     public File getDestinationDir() {
         return _destinationDir;
-    }
-
-    /**
-     * Gets the ColumnSettingsPanel attribute of the ClassType object
-     *
-     * @return The ColumnSettingsPanel value
-     */
-    public JColumnSettingsPanel getColumnSettingsPanel() {
-        return null;
-    }
-
-    /**
-     * Gets the TableSettingsPanel attribute of the ClassType object
-     *
-     * @todo return a TableConfigurator interface instead, to avoid dependence on
-     *      swing packae
-     * @return The TableSettingsPanel value
-     */
-    public JTableSettingsPanel getTableSettingsPanel() {
-        return null;
     }
 
     /**

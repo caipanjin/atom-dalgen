@@ -55,25 +55,28 @@
 		<middlegen configfile="${middlegen.config.file}" tabs="${tabs}" prefsdir="${dir.target}">
 			<iwallet destination="" mergedir="${middlegen.templates}/mergedir" package="${middlegen.package}">
 				<!-- 生成数据对象(DataObject)基类 -->
-				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/base-do.vm" filename="dto/BaseDO.java" />
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/base-do.vm" filename="dal/dto/BaseDO.java" />
 
 				<!-- 为每一张表生成一个数据对象类 -->
-				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/do.vm" filename="dto/{0}DO.java" />
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/do.vm" filename="dal/dto/{0}DO.java" />
                 
+				<!-- 为每一张表生成一个数据表字段类 -->
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/field.vm" filename="dal/field/{0}FieldEnum.java" />
+				                
                 <!-- 生成通用的DAO接口类 -->
-                <fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/base-dao.vm" filename="dao/BaseDAO.java" />
+                <fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/base-dao.vm" filename="dal/dao/BaseDAO.java" />
                 
 				<!-- 为每一张表生成一个DAO接口 -->
-				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/dao.vm" filename="dao/{0}DAO.java" />
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/dao.vm" filename="dal/dao/{0}DAO.java" />
 
 				<!-- 为每一张表生成ibatis DAO实现 -->
-				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/mybatis-dao.vm" filename="mybatis/MyBatis{0}DAO.java" />
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/mybatis-dao.vm" filename="dal/mybatis/MyBatis{0}DAO.java" />
 
 				<!-- 生成访问sequence表的DAO接口 
-				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/seq-dao.vm" filename="dao/SeqDAO.java" />
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/seq-dao.vm" filename="dal/dao/SeqDAO.java" />
 				-->
 				<!-- 生成SequenceDAO的Ibatis实现 
-				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/seq-mybatis.vm" filename="mybatis/MyBatisSeqDAO.java" />
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/seq-mybatis.vm" filename="dal/mybatis/MyBatisSeqDAO.java" />
 				-->
 				<!-- 为每一张表生成一个sqlmapping文件 -->
 				<fileproducer destination="${middlegen.destination}/resources" template="${middlegen.templates}/table-mapper.vm" filename="mybatis/${database.schema}/{0}-mapper.xml" />
@@ -87,7 +90,7 @@
 				<fileproducer destination="${middlegen.destination}/resources" template="${middlegen.templates}/mybatis-config.vm" filename="mybatis/mybatis-${database.schema}-config.xml" />
 				
 				<!-- 生成DAO beans的Spring配置文件 -->
-				<fileproducer destination="${middlegen.destination}/resources/META-INF/spring" template="${middlegen.templates}/beans-dal-dao.vm" filename="mybatis-das-dao-auto.xml" />
+				<fileproducer destination="${middlegen.destination}/resources/META-INF/spring" template="${middlegen.templates}/beans-dal-dao.vm" filename="${database.schema}-das-dao-auto.xml" />
 			</iwallet>
 		</middlegen>
 		<echo message="DAL生成已成功!" />
