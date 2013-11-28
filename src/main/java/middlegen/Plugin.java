@@ -1,33 +1,3 @@
-/*
- * Copyright (c) 2001, Aslak Hellesøy, BEKK Consulting
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * - Redistributions of source code must retain the above copyright notice,
- *   this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * - Neither the name of BEKK Consulting nor the names of its
- *   contributors may be used to endorse or promote products derived from
- *   this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
- * DAMAGE.
- */
 package middlegen;
 
 import java.io.File;
@@ -51,58 +21,55 @@ import com.atom.dalgen.utils.CfgUtils;
 /**
  * This is the baseclass for plugins. It can be subclassed to add additional
  * functionality, or it can be used "as-is".
- *
- * @author <a href="mailto:aslak.hellesoy@bekk.no">Aslak Helles</a>
- * @created 3. april 2002
  */
 public class Plugin {
 
     /**
      * @todo-javadoc Describe the field
      */
-    private Middlegen                            _middlegen;
+    private Middlegen                            middlegen;
 
     /**
      * @todo-javadoc Describe the column
      */
-    private final Map<DbColumn, ColumnDecorator> _columnDecorators               = new HashMap<DbColumn, ColumnDecorator>();
+    private final Map<DbColumn, ColumnDecorator> columnDecorators               = new HashMap<DbColumn, ColumnDecorator>();
     /**
      * @todo-javadoc Describe the column
      */
-    private final Map<String, TableDecorator>    _tableDecorators                = new HashMap<String, TableDecorator>();
+    private final Map<String, TableDecorator>    tableDecorators                = new HashMap<String, TableDecorator>();
     /**
      * @todo-javadoc Describe the column
      */
-    private final Class[]                        _columnDecoratorConstructorArgs = new Class[] { Column.class };
+    private final Class<?>[]                     columnDecoratorConstructorArgs = new Class<?>[] { Column.class };
     /**
      * @todo-javadoc Describe the column
      */
-    private final Class<?>[]                     _tableDecoratorConstructorArgs  = new Class<?>[] { Table.class };
+    private final Class<?>[]                     tableDecoratorConstructorArgs  = new Class<?>[] { Table.class };
 
     /**
      * @todo-javadoc Describe the column
      */
-    private File                                 _destinationDir;
+    private File                                 destinationDir;
 
     /** The name of the plugin */
-    private String                               _name;
+    private String                               name;
 
     /**
      * @todo-javadoc Describe the field
      */
-    private String                               _mergedir;
+    private String                               mergedir;
 
     /**
      * @todo-javadoc Describe the field
      */
-    private Map<String, FileProducer>            _fileProducers                  = new HashMap<String, FileProducer>();
+    private Map<String, FileProducer>            fileProducers                  = new HashMap<String, FileProducer>();
     /**
      * @todo-javadoc Describe the field
      */
-    private String                               _displayName;
+    private String                               displayName;
 
     /** Whether or not to use the schema prefix in generated code. */
-    private boolean                              _useSchemaPrefix                = false;
+    private boolean                              useSchemaPrefix                = false;
 
     /** Constructor */
     public Plugin() {
@@ -116,7 +83,7 @@ public class Plugin {
      * @param flag Describe what the parameter does
      */
     public void setUseSchemaPrefix(boolean flag) {
-        _useSchemaPrefix = flag;
+        useSchemaPrefix = flag;
     }
 
     /**
@@ -125,7 +92,7 @@ public class Plugin {
      * @param md The new Mergedir value
      */
     public void setMergedir(String md) {
-        _mergedir = md;
+        mergedir = md;
     }
 
     /**
@@ -135,14 +102,14 @@ public class Plugin {
      * @param dir The new Destination value
      */
     public void setDestination(File dir) {
-        _destinationDir = dir;
+        destinationDir = dir;
     }
 
     /**
      * Sets the logical plugin name. Not intended to be called from Ant.
      */
     public final void setName(String name) {
-        _name = name;
+        this.name = name;
     }
 
     /**
@@ -151,20 +118,15 @@ public class Plugin {
      * @return The UseSchemaPrefix value
      */
     public boolean isUseSchemaPrefix() {
-        return _useSchemaPrefix;
+        return useSchemaPrefix;
     }
 
     /**
-     * Returns the name to be used in the relations. Can be overridden in
-     * subclasses
-     *
-     * @todo-javadoc Write javadocs for method parameter
-     * @param table Describe what the parameter does
-     * @return The RelationName value
+     * Returns the name to be used in the relations. Can be overridden in subclasses
      */
-    public String getRelationName(Table table) {
-        return table.getSqlName() + "-" + getName();
-    }
+//    public String getRelationName(Table table) {
+//        return table.getSqlName() + "-" + getName();
+//    }
 
     /**
      * Gets the Middlegen attribute of the Plugin object
@@ -172,7 +134,7 @@ public class Plugin {
      * @return The Middlegen value
      */
     public Middlegen getMiddlegen() {
-        return _middlegen;
+        return middlegen;
     }
 
     /**
@@ -181,7 +143,7 @@ public class Plugin {
      * @return The DestinationDir value
      */
     public File getDestinationDir() {
-        return _destinationDir;
+        return destinationDir;
     }
 
     /**
@@ -190,7 +152,7 @@ public class Plugin {
      * @return The DisplayName value
      */
     public final String getDisplayName() {
-        return _displayName;
+        return displayName;
     }
 
     /**
@@ -199,7 +161,7 @@ public class Plugin {
      * @return The Name value
      */
     public final String getName() {
-        return _name;
+        return name;
     }
 
     /**
@@ -226,7 +188,7 @@ public class Plugin {
      * @return The Tables value
      */
     public final Collection<TableDecorator> getTables() {
-        return _tableDecorators.values();
+        return tableDecorators.values();
     }
 
     /**
@@ -237,7 +199,7 @@ public class Plugin {
      * @return The Table value
      */
     public final TableDecorator getTable(String sqlName) {
-        return (TableDecorator) _tableDecorators.get(sqlName);
+        return (TableDecorator) tableDecorators.get(sqlName);
     }
 
     /**
@@ -246,7 +208,7 @@ public class Plugin {
      * @return The Mergedir value
      */
     public String getMergedir() {
-        return _mergedir;
+        return mergedir;
     }
 
     /**
@@ -263,16 +225,16 @@ public class Plugin {
         String id = fileProducer.getId();
         if (id == null) {
             // YUK. Magic id :-(
-            fileProducer.setId("__custom_" + _fileProducers.size());
+            fileProducer.setId("__custom_" + fileProducers.size());
         }
 
-        FileProducer customFileProducer = (FileProducer) _fileProducers.get(id);
+        FileProducer customFileProducer = (FileProducer) fileProducers.get(id);
         if (customFileProducer != null) {
             // A custom file producer has been specified in Ant. Override the destination.
             customFileProducer.copyPropsFrom(fileProducer);
         } else {
             // use the added file producer, but perform some sanity checks first.
-            _fileProducers.put(fileProducer.getId(), fileProducer);
+            fileProducers.put(fileProducer.getId(), fileProducer);
         }
     }
 
@@ -287,7 +249,7 @@ public class Plugin {
             tableDecorator.setPlugin(this);
 
             // cache it using subject as key. will be by clients as argument to decorate()
-            _tableDecorators.put(table.getSqlName(), tableDecorator);
+            tableDecorators.put(table.getSqlName(), tableDecorator);
 
             // decorate columns and store refs in newly created TableDecorator
             DbColumn pkColumn = (DbColumn) table.getPkColumn();
@@ -295,28 +257,25 @@ public class Plugin {
                 ColumnDecorator pkColumnDecorator = createDecorator(pkColumn);
                 pkColumnDecorator.setTableDecorator(tableDecorator);
                 tableDecorator.setPkColumnDecorator(pkColumnDecorator);
-                _columnDecorators.put(pkColumn, pkColumnDecorator);
+                columnDecorators.put(pkColumn, pkColumnDecorator);
             }
 
-            Collection<ColumnDecorator> columnDecorators = new ArrayList<ColumnDecorator>(table
-                .getColumns().size());
+            Collection<ColumnDecorator> columnDecorators = new ArrayList<ColumnDecorator>(table.getColumns().size());
             for (Column coltmp : table.getColumns()) {
-                DbColumn column = (DbColumn) coltmp;
-
-                ColumnDecorator columnDecorator = createDecorator(column);
+                ColumnDecorator columnDecorator = createDecorator((DbColumn) coltmp);
                 columnDecorator.setPlugin(this);
                 columnDecorator.setTableDecorator(tableDecorator);
-                _columnDecorators.put(column, columnDecorator);
+                columnDecorators.add(columnDecorator);
                 columnDecorators.add(columnDecorator);
             }
             tableDecorator.setColumnDecorators(columnDecorators);
         }
         // now that everything is properly set up, call init on all decorators.
-        for (TableDecorator tbdecorator : _tableDecorators.values()) {
+        for (TableDecorator tbdecorator : tableDecorators.values()) {
             tbdecorator.init();
         }
 
-        for (ColumnDecorator coldecorator : _columnDecorators.values()) {
+        for (ColumnDecorator coldecorator : columnDecorators.values()) {
             coldecorator.init();
         }
     }
@@ -327,7 +286,7 @@ public class Plugin {
      * @exception MiddlegenException if the state is invalid
      */
     public void validate() throws MiddlegenException {
-        if (_destinationDir == null) {
+        if (destinationDir == null) {
             throw new MiddlegenException("destination must be specified in <" + getName() + ">");
         }
     }
@@ -351,7 +310,7 @@ public class Plugin {
      * @param s The new DisplayName value
      */
     protected final void setDisplayName(String s) {
-        _displayName = s;
+        displayName = s;
     }
 
     /**
@@ -378,8 +337,8 @@ public class Plugin {
      *
      * @param middlegen The new Middlegen value
      */
-    void setMiddlegen(Middlegen middlegen) {
-        _middlegen = middlegen;
+    public void setMiddlegen(Middlegen middlegen) {
+        this.middlegen = middlegen;
     }
 
     /**
@@ -393,16 +352,14 @@ public class Plugin {
      */
     final Column decorate(Column column) {
         if (column.getClass() != DbColumn.class) {
-            throw new IllegalArgumentException("column must be of class "
-                                               + DbColumn.class.getName());
+            throw new IllegalArgumentException("column must be of class " + DbColumn.class.getName());
         }
-        if (column == null) {
-            throw new IllegalArgumentException("column can't be null!");
-        }
-        ColumnDecorator result = (ColumnDecorator) _columnDecorators.get(column);
+
+        ColumnDecorator result = (ColumnDecorator) columnDecorators.get(column);
         if (result == null) {
             throw new IllegalArgumentException("result can't be null!");
         }
+
         return result;
     }
 
@@ -415,14 +372,12 @@ public class Plugin {
      * @param table Describe what the parameter does
      * @return Describe the return value
      */
-    final Table decorate(Table table) {
+    public final Table decorate(Table table) {
         if (!table.getClass().equals(DbTable.class)) {
             throw new IllegalArgumentException("table must be of class " + DbTable.class.getName());
         }
-        if (table == null) {
-            throw new IllegalArgumentException("table can't be null!");
-        }
-        TableDecorator result = (TableDecorator) _tableDecorators.get(table.getSqlName());
+
+        TableDecorator result = (TableDecorator) tableDecorators.get(table.getSqlName());
         if (result == null) {
             throw new IllegalArgumentException("result can't be null!");
         }
@@ -436,7 +391,7 @@ public class Plugin {
      * @return The FileProducers value
      */
     private final Collection<FileProducer> getFileProducers() {
-        return _fileProducers.values();
+        return fileProducers.values();
     }
 
     /**
@@ -448,28 +403,24 @@ public class Plugin {
      * @throws Exception 
      */
     private VelocityEngine getEngine() throws MiddlegenException {
-        VelocityEngine velocityEngine = new VelocityEngine();
-
         Properties props = new Properties();
-        // �趨velocity�ַ�
-        props.setProperty(Velocity.INPUT_ENCODING, CfgUtils.findValue(Velocity.INPUT_ENCODING,
-            "GBK"));
-        props.setProperty(Velocity.OUTPUT_ENCODING, CfgUtils.findValue(Velocity.OUTPUT_ENCODING,
-            "GBK"));
+        props.setProperty(Velocity.INPUT_ENCODING, CfgUtils.findValue(Velocity.INPUT_ENCODING, "GBK"));
+        props.setProperty(Velocity.OUTPUT_ENCODING, CfgUtils.findValue(Velocity.OUTPUT_ENCODING, "GBK"));
 
         // only load templates from file we don't have access to the jar and use a workaround for that
         props.setProperty(RuntimeConstants.RESOURCE_LOADER, "file");
         // use a resource loader that won't throw an exception if a resource (file) isn't found
-        props.setProperty("file.resource.loader.class", "middlegen.KindFileResourceLoader");
+        props.setProperty("file.resource.loader.class", KindFileResourceLoader.class.getName());
         // tell velocity where merge files are located
         if (getMergedir() != null) {
             props.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, getMergedir());
         }
         // use our own log system that doesn't close the appenders upon gc() (the velocity one does)
-        props.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
-            "middlegen.DontCloseLog4JLogSystem");
+        props.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, DontCloseLog4JLogSystem.class.getName());
         try {
+            VelocityEngine velocityEngine = new VelocityEngine();
             velocityEngine.init(props);
+
             return velocityEngine;
         } catch (Exception e) {
             // Hmm, throwning Exception is bad API, Velocity guys ;-)
@@ -499,8 +450,7 @@ public class Plugin {
 
                     // Check if we should generate for the table.
                     try {
-                        if (DalUtil.inTabs(tableName)
-                            && tableDecorator.getTableElement().isGenerate()) {
+                        if (DalUtil.inTabs(tableName) && tableDecorator.getTableElement().isGenerate()) {
                             // Check whether the file producer accepts this table
                             if (tableDecorator.isGenerate() && fileProducer.accept(tableDecorator)) {
                                 fileProducer.getContextMap().put("plugin", this);
@@ -539,11 +489,10 @@ public class Plugin {
      * @return Describe the return value
      */
     private final ColumnDecorator createDecorator(DbColumn column) {
-        Object decorator = _columnDecorators.get(column);
+        Object decorator = columnDecorators.get(column);
 
         if (decorator == null) {
-            decorator = createDecorator(column, getColumnDecoratorClass(),
-                _columnDecoratorConstructorArgs);
+            decorator = createDecorator(column, getColumnDecoratorClass(), columnDecoratorConstructorArgs);
         }
 
         return (ColumnDecorator) decorator;
@@ -553,11 +502,10 @@ public class Plugin {
      * Describe what the method does
      */
     private final TableDecorator createDecorator(DbTable table) {
-        Object decorator = _tableDecorators.get(table.getSqlName());
+        Object decorator = tableDecorators.get(table.getSqlName());
 
         if (decorator == null) {
-            decorator = createDecorator(table, getTableDecoratorClass(),
-                _tableDecoratorConstructorArgs);
+            decorator = createDecorator(table, getTableDecoratorClass(), tableDecoratorConstructorArgs);
         }
 
         return (TableDecorator) decorator;
@@ -566,11 +514,9 @@ public class Plugin {
     /**
      * Describe what the method does
      */
-    private final Object createDecorator(Object subject, Class<?> decoratorClass,
-                                         Class<?>[] decoratorConstructorArgs) {
+    private final Object createDecorator(Object subject, Class<?> decoratorClass, Class<?>[] decoratorConstructorArgs) {
         Object decorator = null;
-        String invokedConstructor = decoratorClass.getName() + "(" + subject.getClass().getName()
-                                    + ")";
+        String invokedConstructor = decoratorClass.getName() + "(" + subject.getClass().getName() + ")";
         try {
             Constructor<?> constructor = decoratorClass.getConstructor(decoratorConstructorArgs);
             decorator = constructor.newInstance(new Object[] { subject });

@@ -125,8 +125,8 @@ public class Relation {
       _rightRole.setTargetRole(_leftRole);
 
       // Add the two roles to each of the tables in the relation
-      _leftTable.addRelationshipRole(_leftRole);
-      _rightTable.addRelationshipRole(_rightRole);
+        //      _leftTable.addRelationshipRole(_leftRole);
+        //      _rightTable.addRelationshipRole(_rightRole);
    }
 
 
@@ -157,12 +157,12 @@ public class Relation {
     * @param plugin Describe what the parameter does
     * @return The Name value
     */
-   public String getName(Plugin plugin) {
-      String leftName = plugin.getRelationName(_leftTable);
-      String rightName = plugin.getRelationName(_rightTable);
-      String name = MessageFormat.format(_namePattern, new String[]{leftName, rightName});
-      return name;
-   }
+    //   public String getName(Plugin plugin) {
+    //      String leftName = plugin.getRelationName(_leftTable);
+    //      String rightName = plugin.getRelationName(_rightTable);
+    //      String name = MessageFormat.format(_namePattern, new String[]{leftName, rightName});
+    //      return name;
+    //   }
 
 
    /**

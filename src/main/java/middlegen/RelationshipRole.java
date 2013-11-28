@@ -236,12 +236,12 @@ public class RelationshipRole extends PreferenceAware {
     * @param plugin the plugin that does the name conversion of the tables
     * @return the plugin-specific name
     */
-   public String getName(Plugin plugin) {
-      String originName = plugin.getRelationName(_origin);
-      String targetName = plugin.getRelationName(_target);
-      String name = MessageFormat.format(_namePattern, new String[]{originName, targetName});
-      return name;
-   }
+    //   public String getName(Plugin plugin) {
+    //      String originName = plugin.getRelationName(_origin);
+    //      String targetName = plugin.getRelationName(_target);
+    //      String name = MessageFormat.format(_namePattern, new String[]{originName, targetName});
+    //      return name;
+    //   }
 
 
    /**

@@ -15,6 +15,9 @@ public class IWalletResultMapConfig {
     /** the name of the result map */
     protected String                    name;
 
+    /** 类型-MyBatis3引入 */
+    protected String                    type;
+
     /** a list of all column configurations */
     protected List<IWalletColumnConfig> columns = new ArrayList<IWalletColumnConfig>();
 
@@ -40,6 +43,14 @@ public class IWalletResultMapConfig {
      */
     public void setName(String string) {
         name = string;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     /**

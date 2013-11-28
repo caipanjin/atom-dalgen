@@ -86,34 +86,30 @@ public class IWalletConfig {
         }
 
         try {
-            instance = new IWalletConfig();
-
             Digester digester = new Digester();
 
-            digester.push(instance);
-            digester.setValidating(false);
-
-            // support for type map config
-            digester.addCallMethod("tables/typemap", "addJavaTypeMap", 2, new String[] {
-                    "java.lang.String", "java.lang.String" }); // 传参是两个字符串，将他们作为一个String数组传进来
+            // 传参是两个字符串，将他们作为一个String数组传进来
+            digester.addCallMethod("tables/typemap", "addJavaTypeMap", 2, new String[] { "java.lang.String", "java.lang.String" });
             digester.addCallParam("tables/typemap", 0, "from");
             digester.addCallParam("tables/typemap", 1, "to");
 
             // support for include config
-            digester.addCallMethod("tables/include", "addInclude", 1,
-                new String[] { "java.lang.String" });
+            digester.addCallMethod("tables/include", "addInclude", 1, new String[] { "java.lang.String" });
             digester.addCallParam("tables/include", 0, "table");
 
             // support for tableprefix config
-            digester.addCallMethod("tables/tableprefix", "addTablePrefix", 1,
-                new String[] { "java.lang.String" });
+            digester.addCallMethod("tables/tableprefix", "addTablePrefix", 1, new String[] { "java.lang.String" });
             digester.addCallParam("tables/tableprefix", 0, "prefix");
 
-            // parse sequence
-            digester.addObjectCreate("tables/seq", IWalletSeqConfig.class); // IWalletSeqConfig类用于展现seq属性的一些情况
+            // IWalletSeqConfig类用于展现SEQ属性的一些情况
+            digester.addObjectCreate("tables/seq", IWalletSeqConfig.class);
             digester.addSetProperties("tables/seq", "name", "name");
             digester.addSetNext("tables/seq", "addSeqConfig");
 
+            // 解析
+            instance = new IWalletConfig();
+            digester.push(instance);
+            digester.setValidating(false);
             digester.parse(configFile);
 
             if (!includes.isEmpty()) {
@@ -149,20 +145,27 @@ public class IWalletConfig {
                 // parse resultmap
                 digester.addObjectCreate("table/resultmap", IWalletResultMapConfig.class);
                 digester.addSetProperties("table/resultmap", "name", "name");
+                digester.addSetProperties("table/resultmap", "type", "type");
                 digester.addSetNext("table/resultmap", "addResultMap");
                 // parse resultmap column
                 digester.addObjectCreate("table/resultmap/column", IWalletColumnConfig.class);
                 digester.addSetProperties("table/resultmap/column", "name", "name");
                 digester.addSetProperties("table/resultmap/column", "javatype", "javaType");
                 digester.addSetNext("table/resultmap/column", "addColumn");
-                
+
                 // parse sql
                 digester.addObjectCreate("table/sql", IWalletSqlConfig.class);
                 digester.addSetProperties("table/sql", "id", "id");
                 digester.addSetProperties("table/sql", "escape", "escape");
                 digester.addBeanPropertySetter("table/sql");
                 digester.addSetNext("table/sql", "addSql");
-                
+
+                // parse copy
+                digester.addObjectCreate("table/copy", CopyConfig.class);
+                digester.addSetProperties("table/copy", "type", "type");
+                digester.addBeanPropertySetter("table/copy", "copy");
+                digester.addSetNext("table/copy", "addCopy");
+
                 // parse operation
                 digester.addObjectCreate("table/operation", IWalletOperationConfig.class);
                 digester.addSetProperties("table/operation", "name", "name");
@@ -177,11 +180,9 @@ public class IWalletConfig {
                 digester.addSetProperties("table/operation", "resultclass", "resultClass");
                 digester.addSetProperties("table/operation", "append", "append");
 
-                digester.addObjectCreate("table/operation/extraparams/param",
-                    IWalletParamConfig.class);
+                digester.addObjectCreate("table/operation/extraparams/param", IWalletParamConfig.class);
                 digester.addSetProperties("table/operation/extraparams/param", "name", "name");
-                digester.addSetProperties("table/operation/extraparams/param", "javatype",
-                    "javaType");
+                digester.addSetProperties("table/operation/extraparams/param", "javatype", "javaType");
                 digester.addSetNext("table/operation/extraparams/param", "addExtraParam");
 
                 digester.addCallMethod("table/operation/sql", "setSql", 0);
@@ -191,18 +192,16 @@ public class IWalletConfig {
                 digester.addSetNext("table/operation", "addOperation");
                 digester.addSetNext("table", "addTableConfig");
 
-                for (Iterator<String> i = includes.iterator(); i.hasNext();) {
+                for (String table : includes) {
                     digester.clear();
                     digester.push(instance);
-                    digester.parse(new File(configFile.getParentFile(), i.next()));
+                    digester.parse(new File(configFile.getParentFile(), table));
                 }
             }
         } catch (Exception e) {
             // clear table config
             tableConfigs = new HashMap<String, IWalletTableConfig>();
-
-            throw new IWalletConfigException("Can't parse configuration file "
-                                             + configFile.getPath() + " due to exception.", e);
+            throw new IWalletConfigException("Parse configuration file " + configFile.getPath() + " exception！", e);
         }
     }
 

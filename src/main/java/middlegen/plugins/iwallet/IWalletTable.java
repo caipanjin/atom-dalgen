@@ -19,6 +19,7 @@ import middlegen.Table;
 import middlegen.Util;
 import middlegen.javax.JavaPlugin;
 import middlegen.javax.JavaTable;
+import middlegen.plugins.iwallet.config.CopyConfig;
 import middlegen.plugins.iwallet.config.IWalletConfig;
 import middlegen.plugins.iwallet.config.IWalletConfigException;
 import middlegen.plugins.iwallet.config.IWalletOperationConfig;
@@ -189,6 +190,10 @@ public class IWalletTable extends JavaTable implements Comparable {
         return this.tableConfig.getSqls();
     }
 
+    public List<CopyConfig> getCopys() {
+        return this.tableConfig.getCopys();
+    }
+
     /**
      * Gets all operations
      *
@@ -254,11 +259,11 @@ public class IWalletTable extends JavaTable implements Comparable {
     public Set<String> getIbatisImports() {
         return ibatisImports;
     }
- 
+
     public Set<String> getMyBatisImports() {
         myBatisImports.addAll(this.daoImports);
         myBatisImports.addAll(this.ibatisImports);
-        
+
         return myBatisImports;
     }
 

@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.atom.dalgen.utils.LogUtils;
+
 /**
  * A bean class represents an iwallet table configuration.
  */
@@ -44,9 +46,12 @@ public class IWalletTableConfig {
 
     /** 票据ID */
     private boolean                          ticket;
-    
+
     /** a list of all public sqls. */
-    private List<IWalletSqlConfig> sqls = new ArrayList<IWalletSqlConfig>();
+    private List<IWalletSqlConfig>           sqls       = new ArrayList<IWalletSqlConfig>();
+
+    /** a list of all public copys. */
+    private List<CopyConfig>                 copys      = new ArrayList<CopyConfig>();
 
     /** a list of all configured operations */
     private List<IWalletOperationConfig>     operations = new ArrayList<IWalletOperationConfig>();
@@ -136,13 +141,21 @@ public class IWalletTableConfig {
 
         return sb.toString();
     }
-    
+
     public List<IWalletSqlConfig> getSqls() {
         return this.sqls;
     }
-    
+
     public void addSql(IWalletSqlConfig sql) {
         this.sqls.add(sql);
+    }
+
+    public List<CopyConfig> getCopys() {
+        return this.copys;
+    }
+
+    public void addCopy(CopyConfig copy) {
+        this.copys.add(copy);
     }
 
     /**

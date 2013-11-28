@@ -4,27 +4,27 @@
 	<!-- ========================================== -->
 	<!-- 公用列名 -->
 	<!-- ========================================== -->
-    <!--
-	<column name="mapping_type" javatype="com.alipay.mdatasync.common.service.facade.enums.SplitRuleMapTypeEnum" />
-	-->
-    
+	<!-- <column name="mapping_type" javatype="com.alipay.mdatasync.common.service.facade.enums.SplitRuleMapTypeEnum" /> -->
+
 	<!-- ========================================== -->
 	<!-- 公用映射关系 -->
 	<!-- ========================================== -->
-	<!--
-    <resultmap name="McenterSplitRule-maxID">
-		<column name="user_id" javatype="java.lang.String" />
-	</resultmap>
-	-->
-	
+	<copy type="xml">
+	<![CDATA[
+	<resultMap id="RM-UNAME" type="java.lang.String">
+		<result property="uname" column="uname" javaType="java.lang.String" />
+	</resultMap>
+	]]>
+	</copy>
+
 	<sql id="abc">abc</sql>
-	
+
 	<sql id="abcefg" escape="true">
 	<![CDATA[
 		abcefg<efg & abcefg>abc
 	]]>
 	</sql>
-    
+
 	<!-- ========================================== -->
 	<!-- 数据表操作 -->
 	<!-- ========================================== -->
@@ -34,22 +34,29 @@
 			SELECT COUNT(*) FROM atom_user
 		</sql>
 	</operation>
-	
+
 	<operation name="find" multiplicity="one">
 		<description>查询单条记录</description>
 		<sql>
 			SELECT * FROM atom_user WHERE id=?
 		</sql>
 	</operation>
-    
-    <operation name="findAll" multiplicity="many">
+
+	<operation name="findAll" multiplicity="many">
 		<description>查询所有记录</description>
 		<sql>
 			SELECT * FROM atom_user
 		</sql>
 	</operation>
-    
-    <operation name="delete">
+
+	<operation name="findName" multiplicity="many" resultMap="RM-UNAME">
+		<description>查询所有记录</description>
+		<sql>
+			SELECT uname FROM atom_user
+		</sql>
+	</operation>
+
+	<operation name="delete">
 		<description>删除用户信息</description>
 		<sql>
 			DELETE FROM atom_user WHERE id=?

@@ -1,7 +1,3 @@
-/*
- * Taobao.com Inc.
- * Copyright (c) 2000-2004 All Rights Reserved.
- */
 package middlegen.plugins.iwallet.util;
 
 import java.io.ByteArrayInputStream;
@@ -26,10 +22,6 @@ import com.atom.dalgen.utils.LogUtils;
 
 /**
  * A utility class used to parse sql statements.
- *
- * @author Cheng Li
- *
- * @version $Id: SqlParser.java,v 1.1 2004/12/24 07:34:20 baobao Exp $
  */
 public class SqlParser {
     /** the sql statement to be parsed */
@@ -126,8 +118,6 @@ public class SqlParser {
 
     /**
      * Return the formatted sql statement.
-     *
-     * @return
      */
     public String getParsedSql() {
         return zst.toString();

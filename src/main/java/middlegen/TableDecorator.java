@@ -216,9 +216,9 @@ public class TableDecorator extends PreferenceAware implements Table {
      *
      * @return The RelationshipRoles value
      */
-    public final Collection getRelationshipRoles() {
-        return _subject.getRelationshipRoles();
-    }
+//    public final Collection getRelationshipRoles() {
+//        return _subject.getRelationshipRoles();
+//    }
 
     /**
      * Gets all the mandatory relationship roles. That is, the roles where the
@@ -231,9 +231,9 @@ public class TableDecorator extends PreferenceAware implements Table {
      * @todo perhaps we need to iterate over all columnmaps?
      * @return The MandatoryRelationshipRoles value
      */
-    public Collection getMandatoryRelationshipRoles() {
-        return getRelationshipRoles(middlegen.predicates.relation.Mandatory.getInstance());
-    }
+//    public Collection getMandatoryRelationshipRoles() {
+//        return getRelationshipRoles(middlegen.predicates.relation.Mandatory.getInstance());
+//    }
 
     /**
      * Gets all the not mandatory relationship roles. That is, the roles where
@@ -243,20 +243,20 @@ public class TableDecorator extends PreferenceAware implements Table {
      * @todo perhaps we need to iterate over all columnmaps?
      * @return The MandatoryRelationshipRoles value
      */
-    public Collection getNotMandatoryRelationshipRoles() {
-        CompositePredicate notMandatory = new Not();
-        notMandatory.add(middlegen.predicates.relation.Mandatory.getInstance());
-        return getRelationshipRoles(notMandatory);
-    }
+    //    public Collection getNotMandatoryRelationshipRoles() {
+    //        CompositePredicate notMandatory = new Not();
+    //        notMandatory.add(middlegen.predicates.relation.Mandatory.getInstance());
+    //        return getRelationshipRoles(notMandatory);
+    //    }
 
     /**
      * Gets the enabled RelationshipRoles where the target is one
      *
      * @return The TargetOneRelationshipRoles value
      */
-    public Collection getOneRelationshipRoles() {
-        return getRelationshipRoles(middlegen.predicates.relation.TargetOne.getInstance());
-    }
+//    public Collection getOneRelationshipRoles() {
+//        return getRelationshipRoles(middlegen.predicates.relation.TargetOne.getInstance());
+//    }
 
     /**
      * Gets the decorated columns
@@ -404,9 +404,9 @@ public class TableDecorator extends PreferenceAware implements Table {
      * @param predicate Describe what the parameter does
      * @return The RelationshipRoles value
      */
-    public Collection getRelationshipRoles(Predicate predicate) {
-        return CollectionUtils.select(getRelationshipRoles(), predicate);
-    }
+//    public Collection getRelationshipRoles(Predicate predicate) {
+//        return CollectionUtils.select(getRelationshipRoles(), predicate);
+//    }
 
     /**
      * Describe the method
@@ -416,9 +416,9 @@ public class TableDecorator extends PreferenceAware implements Table {
      * @todo-javadoc Describe the method parameter
      * @param relationshipRole Describe the method parameter
      */
-    public final void addRelationshipRole(RelationshipRole relationshipRole) {
-        _subject.addRelationshipRole(relationshipRole);
-    }
+//    public final void addRelationshipRole(RelationshipRole relationshipRole) {
+//        _subject.addRelationshipRole(relationshipRole);
+//    }
 
     /**
      * Describe what the method does

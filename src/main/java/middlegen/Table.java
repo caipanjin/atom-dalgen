@@ -91,7 +91,7 @@ public interface Table {
     *
     * @return The RelationshipRoles value
     */
-   public Collection getRelationshipRoles();
+   // public Collection getRelationshipRoles();
 
 
    /**
@@ -167,5 +167,5 @@ public interface Table {
     * @todo-javadoc Describe the method parameter
     * @param relatinshipRole Describe the method parameter
     */
-   public void addRelationshipRole(RelationshipRole relatinshipRole);
+   // public void addRelationshipRole(RelationshipRole relatinshipRole);
 }

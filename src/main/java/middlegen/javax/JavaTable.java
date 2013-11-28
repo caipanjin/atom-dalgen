@@ -36,7 +36,6 @@ import java.util.Iterator;
 
 import middlegen.DbNameConverter;
 import middlegen.Plugin;
-import middlegen.RelationshipRole;
 import middlegen.Table;
 import middlegen.TableDecorator;
 import middlegen.Util;
@@ -98,8 +97,7 @@ public class JavaTable extends TableDecorator {
         String packageName = javaPlugin.getPackage();
         if (packageName.indexOf("{0}") != -1) {
             // Parameterised package name. Replace {0} with lowercase table name.
-            packageName = MessageFormat.format(packageName,
-                new Object[] { getName().toLowerCase() });
+            packageName = MessageFormat.format(packageName, new Object[] { getName().toLowerCase() });
         }
         setPackage(packageName);
     }
@@ -175,21 +173,21 @@ public class JavaTable extends TableDecorator {
      * @param relationshipRole Describe what the parameter does
      * @return The ClassName value
      */
-    public String getClassName(RelationshipRole relationshipRole) {
-        if (relationshipRole.getOrigin(getPlugin()) != this) {
-            throw new IllegalArgumentException("The relationshipRole's origin must be "
-                                               + getSqlName() + " , but was "
-                                               + relationshipRole.getOrigin().getSqlName());
-        }
-        String result;
-        JavaTable target = (JavaTable) relationshipRole.getTarget(getPlugin());
-        if (relationshipRole.isTargetMany()) {
-            result = target.getManyClassName();
-        } else {
-            result = target.getQualifiedDestinationClassName();
-        }
-        return result;
-    }
+    //    public String getClassName(RelationshipRole relationshipRole) {
+    //        if (relationshipRole.getOrigin(getPlugin()) != this) {
+    //            throw new IllegalArgumentException("The relationshipRole's origin must be "
+    //                                               + getSqlName() + " , but was "
+    //                                               + relationshipRole.getOrigin().getSqlName());
+    //        }
+    //        String result;
+    //        JavaTable target = (JavaTable) relationshipRole.getTarget(getPlugin());
+    //        if (relationshipRole.isTargetMany()) {
+    //            result = target.getManyClassName();
+    //        } else {
+    //            result = target.getQualifiedDestinationClassName();
+    //        }
+    //        return result;
+    //    }
 
     /**
      * Gets the Package attribute of the JavaTable object
@@ -262,11 +260,8 @@ public class JavaTable extends TableDecorator {
             try {
                 column = (JavaColumn) c;
             } catch (ClassCastException e) {
-                throw new IllegalStateException(
-                    getPlugin().getClass().getName()
-                            + " must override getColumnDecoratorClass() and return a class which is "
-                            + JavaColumn.class.getName() + " (or a subclass). It was "
-                            + c.getClass().getName());
+                throw new IllegalStateException(getPlugin().getClass().getName() + " must override getColumnDecoratorClass() and return a class which is " + JavaColumn.class.getName()
+                                                + " (or a subclass). It was " + c.getClass().getName());
             }
             if (sb.length() != 0) {
                 sb.append(", ");
@@ -323,30 +318,16 @@ public class JavaTable extends TableDecorator {
             computedBaseClassName = getTableElement().getSingular();
             computedBaseClassName = Util.capitalise(computedBaseClassName);
         } else {
-            computedBaseClassName = DbNameConverter.getInstance()
-                .tableNameToVariableName(getName());
+            computedBaseClassName = DbNameConverter.getInstance().tableNameToVariableName(getName());
             computedBaseClassName = Util.singularise(computedBaseClassName);
         }
         String suffix = ((JavaPlugin) getPlugin()).getSuffix();
         computedBaseClassName += suffix;
 
         if (prefsBaseClassName != null && !prefsBaseClassName.equals(computedBaseClassName)) {
-            LogUtils
-                .log("WARNING ("
-                     + getPlugin().getName()
-                     + "): "
-                     + "Your prefs file indicates that the base class name for table "
-                     + getSqlName()
-                     + " should be "
-                     + prefsBaseClassName
-                     + ", but according to your plugin settings "
-                     + "it should be "
-                     + computedBaseClassName
-                     + ". Middlegen will use "
-                     + prefsBaseClassName
-                     + ". "
-                     + "If you want it to be the other way around, please edit or delete your prefs file, "
-                     + "or modify the name in the gui.");
+            LogUtils.log("WARNING (" + getPlugin().getName() + "): " + "Your prefs file indicates that the base class name for table " + getSqlName() + " should be " + prefsBaseClassName
+                         + ", but according to your plugin settings " + "it should be " + computedBaseClassName + ". Middlegen will use " + prefsBaseClassName + ". "
+                         + "If you want it to be the other way around, please edit or delete your prefs file, " + "or modify the name in the gui.");
         }
 
         if (prefsBaseClassName != null) {

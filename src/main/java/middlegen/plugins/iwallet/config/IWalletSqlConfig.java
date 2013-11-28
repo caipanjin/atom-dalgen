@@ -5,14 +5,20 @@
 package middlegen.plugins.iwallet.config;
 
 /**
+ * SQL节点
+ * 
  * @author shizihu
  * @version $Id: IWalletSqlConfig.java, v 0.1 2013-1-5 下午1:11:01 shizihu Exp $
  */
 public class IWalletSqlConfig {
-
+    /** ID */
     private String  id;
-    private String  sql;
+
+    /** 是否转义 */
     private boolean escape;
+
+    /** SQL内容 */
+    private String  sql;
 
     /** 
      * @see java.lang.Object#toString()

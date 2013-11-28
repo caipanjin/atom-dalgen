@@ -37,11 +37,9 @@ import java.util.List;
 import middlegen.plugins.iwallet.IWalletPlugin;
 import middlegen.plugins.iwallet.IWalletSeq;
 import middlegen.plugins.iwallet.config.IWalletConfig;
-import middlegen.plugins.iwallet.config.IWalletConfigException;
 import middlegen.plugins.iwallet.util.DalUtil;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
 import org.apache.tools.ant.Project;
@@ -60,22 +58,21 @@ import com.atom.dalgen.utils.LogUtils;
 public class MiddlegenTask extends Task implements DynamicConfigurator {
 
     /** 生成器 */
-    private Middlegen    middlegen;
+    private Middlegen middlegen;
 
     /**
      * @todo-javadoc Describe the field
      */
-    private File         prefsDir = new File(System.getProperty("user.home") + File.separator
-                                             + ".middlegen");
+    private File      prefsDir = new File(System.getProperty("user.home") + File.separator + ".middlegen");
 
     /** We're storing the classpath for error reporting. */
-    private final String classpath;
+    // private final String classpath;
 
     /** 配置文件 */
-    private File         configFile;
+    private File      configFile;
 
     /** 执行目标 */
-    private String       tabs;
+    private String    tabs;
 
     /**
      * CTOR
@@ -87,22 +84,13 @@ public class MiddlegenTask extends Task implements DynamicConfigurator {
         LogUtils.log("**********************************");
 
         this.middlegen = new Middlegen(this);
-
-        try {
-            this.classpath = ((AntClassLoader) getClass().getClassLoader()).getClasspath();
-            LogUtils.log("dalgen类路径：" + this.classpath);
-        } catch (ClassCastException e) {
-            throw new BuildException(
-                "middlegen.jar should not be on the system classpath when starting Ant. It should be on a path passed to the <taskdef> using classpath or classpathref.");
-        }
     }
 
     /**
      * Sets the DynamicAttribute attribute of the MiddlegenTask object
      */
     public void setDynamicAttribute(String name, String value) {
-        throw new BuildException("The <" + getTaskName() + "> task doesn't support the \"" + name
-                                 + "\" attribute.");
+        throw new BuildException("The <" + getTaskName() + "> task doesn't support the \"" + name + "\" attribute.");
     }
 
     /**
@@ -118,28 +106,16 @@ public class MiddlegenTask extends Task implements DynamicConfigurator {
      * Describe what the method does
      */
     public void execute() throws BuildException {
+        long start = System.currentTimeMillis();
         LogUtils.log("开始执行dalgen任务：" + this.getClass().getName());
 
         // 2. 初始化DAL配置
         try {
             // 用来初始化dal-config.xml中的内容，_configFile就是dal-config.xml
             IWalletConfig.init(this.configFile);
-        } catch (IWalletConfigException e) {
-            e.printStackTrace();
-            throw new BuildException(e);
-        }
 
-        try {
             Prefs.getInstance().init(this.prefsDir, CfgUtils.getAppName());
-        } catch (MiddlegenException e) {
-            throw new BuildException(e);
-        } catch (NoClassDefFoundError e) {
-            log(
-                "It seems you're running a JDK inferior to 1.4. You should upgrade to JDK 1.4 if you want Middlegen to remember the settings.",
-                Project.MSG_WARN);
-        }
 
-        try {
             MiddlegenPopulator populator = new MiddlegenPopulator(this.middlegen);
 
             // 用来验证dal-config.xml中的SEQ信息
@@ -196,9 +172,7 @@ public class MiddlegenTask extends Task implements DynamicConfigurator {
             }
 
             if (this.middlegen.getTableElements().isEmpty()) {
-                log(
-                    "No <table> elements specified. Reading all tables. This might take a while...",
-                    Project.MSG_WARN);
+                log("No <table> elements specified. Reading all tables. This might take a while...", Project.MSG_WARN);
                 populator.addRegularTableElements();
             }
 
@@ -212,11 +186,12 @@ public class MiddlegenTask extends Task implements DynamicConfigurator {
                 Prefs.getInstance().save();
             } catch (NoClassDefFoundError ignore) {
             }
-        } catch (MiddlegenException e) {
-            throw new BuildException(e);
         } catch (Throwable e) {
             e.printStackTrace();
             throw new BuildException(e);
+        } finally {
+            long time = System.currentTimeMillis() - start;
+            LogUtils.log("dalgen任务执行完成, 耗时[" + time + "]ms.");
         }
     }
 

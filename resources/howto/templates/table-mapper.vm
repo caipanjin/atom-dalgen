@@ -32,6 +32,16 @@
 
 #end
 
+	<!-- ============================================= -->
+    <!-- Public CopyS                                  -->
+    <!-- ============================================= -->
+#foreach ($copy in ${table.copys})
+#if(${copy.type} == "xml")
+	${copy.copy}
+#end
+
+#end
+
 ##generate all statemetns
     <!-- ============================================= -->
     <!-- mapped statements for ${table.ibatisClassName} -->
