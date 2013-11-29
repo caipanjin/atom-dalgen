@@ -31,7 +31,6 @@
 package middlegen;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import middlegen.plugins.iwallet.IWalletPlugin;
@@ -109,7 +108,6 @@ public class MiddlegenTask extends Task implements DynamicConfigurator {
         long start = System.currentTimeMillis();
         LogUtils.log("开始执行dalgen任务：" + this.getClass().getName());
 
-        // 2. 初始化DAL配置
         try {
             // 用来初始化dal-config.xml中的内容，_configFile就是dal-config.xml
             IWalletConfig.init(this.configFile);
@@ -126,14 +124,11 @@ public class MiddlegenTask extends Task implements DynamicConfigurator {
 
                 this.middlegen.getTableElements().clear();
 
-                StringBuffer msgBuffer = new StringBuffer();
-
+                StringBuffer logText = new StringBuffer();
                 int count = 0;
 
                 // plugin.getAllTableNames()用来获得dal-config.xml中的所有表名信息
-                for (Iterator<String> i = plugin.getAllTableNames().iterator(); i.hasNext();) {
-                    String tableName = i.next();
-
+                for (String tableName : plugin.getAllTableNames()) {
                     TableElement tableElement = new TableElement();
                     tableElement.setName(tableName);
 
@@ -141,33 +136,28 @@ public class MiddlegenTask extends Task implements DynamicConfigurator {
 
                     if (DalUtil.inTabs(tableName)) { //要生成DAO的表名.xml
                         // 如果当前表在指定范围内,提示给用户
-                        count++;
-                        msgBuffer.append("(" + count + ")." + tableName + "\n");
+                        logText.append("(" + ++count + ")." + tableName + "\n");
                     }
                 }
 
+                this.log("对以下表重新生成DAL: \n" + logText.toString(), Project.MSG_WARN);
+
+                // SEQ
                 if (StringUtils.equals(tabs, "seq")) {
                     List<IWalletSeq> seqs = plugin.getSequences();
                     int size = seqs == null ? 0 : seqs.size();
 
                     for (int i = 0; i < size; i++) {
-                        count++;
                         IWalletSeq seq = (IWalletSeq) seqs.get(i);
-                        msgBuffer.append("(" + count + ")." + seq.getName() + "\n");
+                        logText.append("(" + ++count + ")." + seq.getName() + "\n");
                     }
+                    
+                    this.log("对以下Sequence重新生成DAL: \n" + logText.toString(), Project.MSG_WARN);
+                }
 
-                    if (msgBuffer.toString().length() == 0) {
-                        log("没有找到Sequence记录.", Project.MSG_WARN);
-                        return;
-                    }
-                    log("对以下Sequence重新生成DAL: \n" + msgBuffer.toString(), Project.MSG_INFO);
-                } else {
-                    if (msgBuffer.toString().length() == 0) {
-                        // 如果指定的表名一个也没匹配,提示错误信息,结束操作
-                        log("指定的表没有找到,请重新操作.", Project.MSG_WARN);
-                        return;
-                    }
-                    log("对以下表重新生成DAL: \n" + msgBuffer.toString(), Project.MSG_INFO);
+                if (logText.toString().length() == 0) {
+                    this.log("指定的数据表/SEQ没有找到, 请重新操作.", Project.MSG_WARN);
+                    return;
                 }
             }
 

@@ -33,13 +33,13 @@ public final class CfgUtils {
         Map<String, String> map = new HashMap<String, String>();
 
         String path = new File(".").getAbsolutePath();
-        String file = FilenameUtils.normalize(path + "/dalgen-config.xml");
+        String file = FilenameUtils.normalize(path + "/system-config.properties");
 
         InputStream is = null;
         try {
             is = new FileInputStream(file);
             Properties props = new Properties();
-            props.loadFromXML(is);
+            props.load(is);
 
             for (Object key : props.keySet()) {
                 map.put(String.valueOf(key), String.valueOf(props.get(key)));

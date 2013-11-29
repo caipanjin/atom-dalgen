@@ -124,9 +124,9 @@ public class Plugin {
     /**
      * Returns the name to be used in the relations. Can be overridden in subclasses
      */
-//    public String getRelationName(Table table) {
-//        return table.getSqlName() + "-" + getName();
-//    }
+    //    public String getRelationName(Table table) {
+    //        return table.getSqlName() + "-" + getName();
+    //    }
 
     /**
      * Gets the Middlegen attribute of the Plugin object
@@ -260,15 +260,17 @@ public class Plugin {
                 columnDecorators.put(pkColumn, pkColumnDecorator);
             }
 
-            Collection<ColumnDecorator> columnDecorators = new ArrayList<ColumnDecorator>(table.getColumns().size());
+            Collection<ColumnDecorator> colnDecorators = new ArrayList<ColumnDecorator>(table.getColumns().size());
             for (Column coltmp : table.getColumns()) {
                 ColumnDecorator columnDecorator = createDecorator((DbColumn) coltmp);
                 columnDecorator.setPlugin(this);
                 columnDecorator.setTableDecorator(tableDecorator);
-                columnDecorators.add(columnDecorator);
-                columnDecorators.add(columnDecorator);
+                colnDecorators.add(columnDecorator);
+                
+                this.columnDecorators.put((DbColumn) coltmp, columnDecorator);
             }
-            tableDecorator.setColumnDecorators(columnDecorators);
+            
+            tableDecorator.setColumnDecorators(colnDecorators);
         }
         // now that everything is properly set up, call init on all decorators.
         for (TableDecorator tbdecorator : tableDecorators.values()) {

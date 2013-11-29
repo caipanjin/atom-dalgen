@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="build-test" default="release" basedir=".">
+	<property name="name" value="atom-dalgen" />
+
+	<property environment="env" />
+	<loadproperties srcFile="system-config.properties" />
+	<loadproperties srcFile="dalgen-config.xml" />
+
+	<target name="release">
+		<echo message="测试消息: name-> ${name}" />
+		<echo message="测试消息: user.home-> ${user.home}" />
+		<echo message="测试消息: app.name-> ${app.name}" />
+		<echo message="测试消息: jdbc.url-> ${jdbc.url}" />
+	</target>
+
+</project>
