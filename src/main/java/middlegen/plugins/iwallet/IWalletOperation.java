@@ -269,7 +269,7 @@ public abstract class IWalletOperation extends PreferenceAware implements Operat
             // }
             // // add by zhaoxu 2007-04-11 --<<<
 
-            msSql.append("#").append(paramName).append("#");
+            msSql.append("#{").append(paramName).append("}");
 
             startIndex = endIndex + 1;
             endIndex = origSql.indexOf("?", startIndex);

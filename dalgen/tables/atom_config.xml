@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<table sqlname="atom_config" ticket="true">
+	<!-- 参考文档: http://mybatis.github.io/mybatis-3/sqlmap-xml.html -->
+	
+    <!-- ========================================== -->
+	<!-- INSERT操作 -->
+	<!-- ========================================== -->
+	<operation name="insert">
+		<description>新增记录</description>
+		<sql>
+			INSERT INTO atom_config(
+				id, catg, name, state, value, cvalue, gmt_create, gmt_modify
+			) VALUES(
+				?, ?, ?, ?, ?, ?, ?, ?
+			)
+		</sql>
+		<sqlmap>
+			INSERT INTO atom_config(
+				id, catg, name, state, value, cvalue, gmt_create, gmt_modify
+			) VALUES(
+				#{id}, #{catg}, #{name}, #{state}, #{value}, #{cvalue}, NOW(), NOW()
+			)
+		</sqlmap>
+	</operation>
+	
+	<!-- ========================================== -->
+	<!-- SELECT操作 -->
+	<!-- ========================================== -->
+	<operation name="find" multiplicity="one">
+		<description>查询单条记录</description>
+		<sql>
+			SELECT * FROM atom_config WHERE catg=? AND name=?
+		</sql>
+	</operation>
+    
+    <operation name="findAll" multiplicity="many">
+		<description>查询所有记录</description>
+		<sql>
+			SELECT * FROM atom_config
+		</sql>
+	</operation>
+    
+    <!-- ========================================== -->
+	<!-- DELETE操作 -->
+	<!-- ========================================== -->
+	
+    <operation name="delete">
+		<description>删除单条记录</description>
+		<sql>
+			DELETE FROM atom_config WHERE catg=? AND name=?
+		</sql>
+	</operation>
+
+</table>
