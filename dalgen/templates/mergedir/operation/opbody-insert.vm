@@ -1,7 +1,27 @@
-##区分用户是否配置机密性及完整性字段
-##如果配置机密性及完整性
-#if((${table.getTableConfig().bConfidentiality()} == true)||(${table.getTableConfig().bIntegrity()} == true))
-#parse ("operation/opbody-insert-new.vm")
+{
+	Profiler.enter("DAO: ${table.namespace}.${operation.name}");
+	try {
+#if (${operation.paramType} == "object")
+    	if (${operation.param.name} == null) {
+    		throw new IllegalArgumentException("Can't insert a null data object into db.");
+    	}
+    	
+#if(${table.ticket})
+        try {
+            ${operation.param.name}.${table.iwPkColumn.setterName}(this.ticketService.nextValue());
+        } catch (TicketException e) {
+            throw new RuntimeException("Set TicketID exception.", e);
+        }
+#end
+
+        this.getSqlSession().insert("${table.namespace}.${operation.name}", ${operation.param.name});
+
+        return ${operation.param.name}.${table.iwPkColumn.getterName}();
 #else
-#parse ("operation/opbody-insert-old.vm")
-#end	
+## Not supported yet.
+#parse ("operation/not-support.vm")
+#end
+	} finally {
+		Profiler.release();
+	}
+}

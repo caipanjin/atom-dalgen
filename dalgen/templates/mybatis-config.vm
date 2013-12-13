@@ -3,7 +3,7 @@
 <configuration>
 	<typeAliases>
 #foreach ($table in $plugin.sortedTables)
-		<typeAlias alias="${table.baseClassName}DO" type="${table.package}.dal.dto.${table.baseClassName}DO"/>
+		<typeAlias alias="${table.baseClassName}DTO" type="${table.package}.dal.dto.${table.baseClassName}DTO"/>
 #end
 	</typeAliases>
 

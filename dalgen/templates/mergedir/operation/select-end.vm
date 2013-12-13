@@ -1,14 +1,13 @@
-##¸ù¾İ²»Í¬Çé¿öäÖÈ¾·µ»ØÖµÇé¿ö£¬Çø·Ö*ºÍ¶à²éÑ¯×Ö¶ÎÎÊÌâ
-#if(${operation.getAllField()} < 0) ##µ±²»ÊÇselect *µÄÊ±ºò
-#if(${operation.getField()} < 0)  ##µ±ÊÇselect XX from tableNameÊ±
-        //½«»úÃÜºóµÄ×Ö¶Î·ÅÈë²éÑ¯Ê±×öÁË±£»¤ĞÔµÄ×Ö¶Î
+##ï¿½ï¿½İ²ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½È¾ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*ï¿½Í¶ï¿½ï¿½Ñ¯ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½
+#if(${operation.getAllField()} < 0) ##ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½select *ï¿½ï¿½Ê±ï¿½ï¿½
+#if(${operation.getField()} < 0)  ##ï¿½ï¿½ï¿½ï¿½select XX from tableNameÊ±
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Üºï¿½ï¿½ï¿½Ö¶Î·ï¿½ï¿½ï¿½ï¿½Ñ¯Ê±ï¿½ï¿½ï¿½Ë±ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½Ö¶ï¿½
 	    temp.add(finalStringValue);
 		 }
 	    return temp;
 	
 #else 
 #if(${table.getTableConfig().bConfidentiality()} == true)
-##parse ("operation/dynamic-extends.vm")
           opDO.set$!{finalRet}(bytesToString);
           temp.add(opDO);
 		  }
@@ -22,7 +21,6 @@
 #end
 #else
 #if(${table.getTableConfig().bConfidentiality()} == true)
-##parse ("operation/dynamic-extends.vm")
           opDO.set$!{finalRet}(bytesToString);
           temp.add(opDO);
 		  }

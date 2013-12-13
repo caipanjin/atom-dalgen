@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<table sqlname="atom_config" ticket="true">
+<table sqlname="atom_crawl" ticket="true">
 	<!-- 参考文档: http://mybatis.github.io/mybatis-3/sqlmap-xml.html -->
 	
     <!-- ========================================== -->
@@ -9,17 +9,17 @@
 	<operation name="insert">
 		<description>新增记录</description>
 		<sql>
-			INSERT INTO atom_config(
-				id, catg, name, state, value, cvalue, gmt_create, gmt_modify
+			INSERT INTO atom_crawl(
+				id, name, content, gmt_create, gmt_modify
 			) VALUES(
-				?, ?, ?, ?, ?, ?, ?, ?
+				?, ?, ?, ?, ?
 			)
 		</sql>
 		<sqlmap>
-			INSERT INTO atom_config(
-				id, catg, name, state, value, cvalue, gmt_create, gmt_modify
+			INSERT INTO atom_crawl(
+				id, name, content, gmt_create, gmt_modify
 			) VALUES(
-				#{id}, #{catg}, #{name}, #{state}, #{value}, #{cvalue}, NOW(), NOW()
+				#{id}, #{name}, #{content,jdbcType=VARCHAR}, NOW(), NOW()
 			)
 		</sqlmap>
 	</operation>
@@ -27,26 +27,19 @@
 	<!-- ========================================== -->
 	<!-- UPDATE操作 -->
 	<!-- ========================================== -->
-	<operation name="update">
+	<operation name="update" paramtype="object">
 		<description>更新记录</description>
-		<extraparams>
-			<param name="catg" javatype="java.lang.String" />
-			<param name="name" javatype="java.lang.String" />
-			<param name="state" javatype="java.lang.String" />
-			<param name="value" javatype="java.lang.String" />
-			<param name="cvalue" javatype="java.lang.String" />
-		</extraparams>
 		<sql>
-			UPDATE atom_config SET
-				state='STATE', value='VALUE', cvalue='CVALUE', gmt_modify='NOW'
+			UPDATE atom_crawl SET
+				name=?, content=?, gmt_modify='NOW'
 			WHERE
-				catg='CATG' AND name='NAME'
+				id=?
 		</sql>
 		<sqlmap>
-			UPDATE atom_config SET
-				state=#{state}, value=#{value}, cvalue=#{cvalue}, gmt_modify=NOW()
+			UPDATE atom_crawl SET
+				name=#{name}, content=#{content,jdbcType=VARCHAR}, gmt_modify=NOW()
 			WHERE
-				catg=#{catg} AND name=#{name}
+				id=#{id}
 		</sqlmap>
 	</operation>
 	
@@ -56,21 +49,21 @@
 	<operation name="find" multiplicity="one">
 		<description>查询单条记录</description>
 		<sql>
-			SELECT * FROM atom_config WHERE catg=? AND name=?
+			SELECT * FROM atom_crawl WHERE id=?
 		</sql>
 	</operation>
 	
-	<operation name="findCatg" multiplicity="many">
-		<description>查询分类记录</description>
+	<operation name="findNames" multiplicity="many">
+		<description>查询爬虫名称</description>
 		<sql>
-			SELECT * FROM atom_config WHERE catg=?
+			SELECT id, name, '' AS content, gmt_create, gmt_modify FROM atom_crawl
 		</sql>
 	</operation>
     
     <operation name="findAll" multiplicity="many">
 		<description>查询所有记录</description>
 		<sql>
-			SELECT * FROM atom_config
+			SELECT * FROM atom_crawl
 		</sql>
 	</operation>
     
@@ -81,7 +74,7 @@
     <operation name="delete">
 		<description>删除单条记录</description>
 		<sql>
-			DELETE FROM atom_config WHERE catg=? AND name=?
+			DELETE FROM atom_crawl WHERE id=?
 		</sql>
 	</operation>
 	

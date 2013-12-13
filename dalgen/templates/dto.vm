@@ -1,0 +1,30 @@
+#parse("copyright.vm")
+package ${table.package}.dal.dto;
+
+#foreach($importClass in $table.doImports)
+#if($importClass != 'java.util.Date')
+import $importClass;
+#end
+#end
+
+#foreach ($copy in $table.copys)
+#if(${copy.type} == 'dto-import')
+	${copy.copy}
+#end
+#end
+
+/**
+ * A data object class directly models database table <tt>$table.sqlName</tt>.
+ */
+public class ${table.baseClassName}DTO extends BaseDTO {
+    private static final long serialVersionUID = 741231858441822688L;
+
+#foreach ($copy in $table.copys)
+#if(${copy.type} == 'dto-body')
+	${copy.copy}
+#end
+#end
+
+#parse("do-fields.vm")
+
+}

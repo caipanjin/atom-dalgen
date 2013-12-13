@@ -9,7 +9,7 @@
 	<!-- ========================================== -->
 	<!-- 公用映射关系 -->
 	<!-- ========================================== -->
-	<copy type="xml">
+	<copy type="xml-mapper">
 	<![CDATA[
 	<resultMap id="RM-UNAME" type="java.lang.String">
 		<result property="uname" column="uname" javaType="java.lang.String" />
@@ -26,7 +26,28 @@
 	</sql>
 
 	<!-- ========================================== -->
-	<!-- 数据表操作 -->
+	<!-- INSERT操作 -->
+	<!-- ========================================== -->
+	<operation name="insert">
+		<description>新增记录</description>
+		<sql>
+			INSERT INTO atom_user(
+				id, uname, passwd, uemail, gmt_create, gmt_modify
+			) VALUES(
+				?, ?, ?, ?, ?, ?
+			)
+		</sql>
+		<sqlmap>
+			INSERT INTO atom_user(
+				id, uname, passwd, uemail, gmt_create, gmt_modify
+			) VALUES(
+				#{id}, #{uname}, #{passwd}, #{uemail}, NOW(), NOW()
+			)
+		</sqlmap>
+	</operation>
+	
+	<!-- ========================================== -->
+	<!-- SELECT操作 -->
 	<!-- ========================================== -->
 	<operation name="count">
 		<description>统计记录总条数</description>
@@ -56,10 +77,53 @@
 		</sql>
 	</operation>
 
+	<operation name="findByName">
+		<description>根据用户名查询记录</description>
+		<sql>
+			SELECT * FROM atom_user WHERE uname=?
+		</sql>
+	</operation>
+
+	<!-- ========================================== -->
+	<!-- UPDATE操作 -->
+	<!-- ========================================== -->
+	<operation name="update" paramtype="object">
+		<description>更新用户</description>
+		<sql>
+			UPDATE atom_user SET passwd=?, uemail=? WHERE uname=?
+		</sql>
+		<sqlmap>
+			UPDATE atom_user SET passwd=#{passwd}, uemail=#{uemail}, gmt_modify=NOW() WHERE uname=#{uname}
+		</sqlmap>
+	</operation>
+
+	<operation name="updatePasswd">
+		<description>更新用户登录密码</description>
+		<sql>
+			UPDATE atom_user SET passwd=? WHERE uname=?
+		</sql>
+		<sqlmap>
+			UPDATE atom_user SET passwd=#{passwd}, gmt_modify=NOW() WHERE uname=#{uname}
+		</sqlmap>
+	</operation>
+
+	<operation name="updateUEmail">
+		<description>更新用户电子邮箱</description>
+		<sql>
+			UPDATE atom_user SET uemail=? WHERE uname=?
+		</sql>
+		<sqlmap>
+			UPDATE atom_user SET uemail=#{uemail}, gmt_modify=NOW() WHERE uname=#{uname}
+		</sqlmap>
+	</operation>
+
+	<!-- ========================================== -->
+	<!-- DELETE操作 -->
+	<!-- ========================================== -->
 	<operation name="delete">
 		<description>删除用户信息</description>
 		<sql>
-			DELETE FROM atom_user WHERE id=?
+			DELETE FROM atom_user WHERE uname=?
 		</sql>
 	</operation>
 

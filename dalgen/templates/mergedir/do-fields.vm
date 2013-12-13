@@ -1,15 +1,18 @@
-#foreach($column in $table.columns) 
+#foreach($column in $table.columns)
+#if($column.variableName != 'id' && $column.variableName != 'gmtCreate' && $column.variableName != 'gmtModify')
 	/** column:${column.sqlName} */
 #if ($column.simpleJavaType == "Money")
 	private Money $column.variableName = new Money(0, 0);
 #else
 	private $column.simpleJavaType $column.variableName;
-#end	
+#end
+#end
+
 #end
 
     // ~~~~~~~~~~~ getters and setters ~~~~~~~~~~~ //
 #foreach($column in $table.columns) 
-
+#if($column.variableName != 'id' && $column.variableName != 'gmtCreate' && $column.variableName != 'gmtModify')
 	public $column.simpleJavaType ${column.getterName}() {
 		return $column.variableName;
 	}
@@ -26,4 +29,4 @@
 #end	
 	}
 #end
-
+#end

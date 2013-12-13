@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<table sqlname="atom_catg" ticket="true">
+	<!-- 参考文档: http://mybatis.github.io/mybatis-3/sqlmap-xml.html -->
+	
+	<!-- ========================================== -->
+	<!-- 代码复制操作 -->
+	<!-- ========================================== -->
+	
+	<copy type="dto-import">
+	<![CDATA[
+	import java.util.List;
+	import java.util.ArrayList;
+	import java.util.Comparator;
+	]]>
+	</copy>
+	
+		<copy type="dto-body">
+	<![CDATA[
+    /** parent */
+    private CatgDTO           parent;
+
+    /** children */
+    private List<CatgDTO>     children         = new ArrayList<CatgDTO>();
+
+    public CatgDTO getParent() {
+        return parent;
+    }
+
+    public void setParent(CatgDTO parent) {
+        this.parent = parent;
+    }
+
+    public List<CatgDTO> getChildren() {
+        if (this.children == null) {
+            this.children = new ArrayList<CatgDTO>();
+        }
+
+        return children;
+    }
+
+    public void setChildren(List<CatgDTO> children) {
+        this.children = children;
+    }
+    
+    /**
+     * 排序比较器
+     */
+    public static final Comparator<CatgDTO> COMPARATOR = new Comparator<CatgDTO>() {
+        public int compare(CatgDTO src, CatgDTO dst) {
+            if (src == null) {
+                return -1;
+            }
+
+            if (dst == null) {
+                return 1;
+            }
+
+            return (int) (src.getSort() - dst.getSort());
+        }
+    };
+	]]>
+	</copy>
+	
+	<!-- ========================================== -->
+	<!-- INSERT操作 -->
+	<!-- ========================================== -->
+	<operation name="insert">
+		<description>新增记录</description>
+		<sql>
+			INSERT INTO atom_catg(
+			id, top, catg, sort, name, gmt_create, gmt_modify
+			) VALUES(
+			?, ?, ?, ?, ?, ?, ?
+			)
+		</sql>
+		<sqlmap>
+			INSERT INTO atom_catg(
+			id, top, catg, sort, name, gmt_create, gmt_modify
+			) VALUES(
+			#{id}, #{top}, #{catg}, #{sort}, #{name}, NOW(), NOW()
+			)
+		</sqlmap>
+	</operation>
+
+	<!-- ========================================== -->
+	<!-- UPDATE操作 -->
+	<!-- ========================================== -->
+	<operation name="update" paramtype="object">
+		<sql>
+			UPDATE atom_catg SET
+			top=?, catg=?, sort=?, name=?, gmt_modify=?
+			WHERE
+			id=?
+		</sql>
+		<sqlmap>
+			UPDATE atom_catg SET
+			top=#{top}, catg=#{catg}, sort=#{sort} name=#{name}, gmt_modify=NOW()
+			WHERE
+			id=#{id}
+		</sqlmap>
+	</operation>
+
+	<!-- ========================================== -->
+	<!-- SELECT操作 -->
+	<!-- ========================================== -->
+	<operation name="find" multiplicity="one">
+		<description>查询单条记录</description>
+		<sql>
+			SELECT * FROM atom_catg WHERE id=?
+		</sql>
+	</operation>
+
+	<operation name="findAll" multiplicity="many">
+		<description>查询所有记录</description>
+		<sql>
+			SELECT * FROM atom_catg ORDER BY sort ASC
+		</sql>
+	</operation>
+
+	<!-- ========================================== -->
+	<!-- DELETE操作 -->
+	<!-- ========================================== -->
+
+	<operation name="delete">
+		<description>删除单条记录</description>
+		<sql>
+			DELETE FROM atom_catg WHERE id=?
+		</sql>
+	</operation>
+
+	<operation name="deleteCatg">
+		<description>删除上级记录</description>
+		<extraparams>
+			<param name="value" javatype="long" />
+		</extraparams>
+		<sql>
+			DELETE FROM atom_catg WHERE id='id' OR catg='id'
+		</sql>
+		<sqlmap>
+			DELETE FROM atom_catg WHERE id=#{value} OR catg=#{value}
+		</sqlmap>
+	</operation>
+
+</table>

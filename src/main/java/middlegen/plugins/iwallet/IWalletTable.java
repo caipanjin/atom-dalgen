@@ -50,7 +50,7 @@ import com.atom.dalgen.utils.LogUtils;
  * @version $Id: IWalletTable.java,v 1.3 2005/09/05 09:01:14 lusu Exp $
  */
 public class IWalletTable extends JavaTable implements Comparable {
-    public static final String DO_PATTERN        = "{0}DO";
+    public static final String DO_PATTERN        = "{0}DTO";
     public static final String DAO_PATTERN       = "{0}DAO";
     public static final String IBATIS_PATTERN    = "MyBatis{0}DAO";
     public static final String DO_PACKAGE        = "dal.dto";

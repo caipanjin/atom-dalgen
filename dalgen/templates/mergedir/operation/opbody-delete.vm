@@ -1,5 +1,6 @@
 {
-## check parameters
+	Profiler.enter("DAO: ${table.namespace}.${operation.name}");
+	try {
 #if (${operation.paramType} == "object")
     	if (${operation.params.get(0).name} == null) {
     		throw new IllegalArgumentException("Can't delete by a null data object.");
@@ -33,4 +34,7 @@
 
 #end
         return this.getSqlSession().delete("${table.namespace}.${operation.name}", ${paramName});
-    }
+	} finally {
+		Profiler.release();
+	}
+}

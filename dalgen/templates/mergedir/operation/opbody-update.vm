@@ -1,7 +1,41 @@
-##区分用户是否配置机密性及完整性字段
-##如果配置机密性及完整性
-#if((${table.getTableConfig().bConfidentiality()} == true)||(${table.getTableConfig().bIntegrity()} == true))
-#parse ("operation/opbody-update-new.vm")
+{
+	Profiler.enter("DAO: ${table.namespace}.${operation.name}");
+	try {
+#if (${operation.paramType} == "object")
+    	if (${operation.params.get(0).name} == null) {
+    		throw new IllegalArgumentException("Can't update by a null data object.");
+    	}
+
+#end
+## prepare parameters
+#if (${operation.params.size()} == 0)
+#set ($paramName = "null")
+
+#elseif (${operation.params.size()} == 1)
+#if (${operation.param.javaTypePrimitive})
+        ${operation.param.simpleJavaTypeForPrimitive} param = new ${operation.param.simpleJavaTypeForPrimitive}(${operation.param.name});
+#set ($paramName = "param")
+
 #else
-#parse ("operation/opbody-update-old.vm")
-#end	
+#set ($paramName = ${operation.param.name})
+
+#end
+#else
+        Map<String, Object> param = new HashMap<String, Object>();
+
+#foreach ($param in ${operation.params})
+#if ($param.javaTypeForPrimitive)
+        param.put("${param.name}", new ${param.simpleJavaTypeForPrimitive}(${param.name}));
+#else
+        param.put("${param.name}", ${param.name});
+#end
+#end
+#set ($paramName = "param")
+
+#end
+## execute update and return
+        return this.getSqlSession().update("${table.namespace}.${operation.name}", ${paramName});
+	} finally {
+		Profiler.release();
+	}
+}

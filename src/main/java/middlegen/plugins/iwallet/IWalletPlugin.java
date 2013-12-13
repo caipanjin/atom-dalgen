@@ -46,11 +46,11 @@ public class IWalletPlugin extends JavaPlugin {
     public static final String MONEY_RESULT_MAP_ID         = "RM-MONEY";
 
     /** full qualified class name for Paginator */
-    public static final String PAGINATOR_CLASS             = "com.alibaba.common.lang.Paginator";
+    public static final String PAGINATOR_CLASS             = "com.github.obullxl.lang.Paginator";
 
     /** full qualified class name for DataAccessException */
     public static final String DATA_ACCESS_EXCEPTION_CLASS = "org.springframework.dao.DataAccessException";
-    public static final String BASE_DO_CLASS               = "BaseDO";
+    public static final String BASE_DO_CLASS               = "BaseDTO";
     public static final String BASE_DAO_CLASS              = "BaseDAO";
 
     /** the time when the source code was generated, may be used to tag source code */

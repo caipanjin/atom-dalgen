@@ -1,12 +1,12 @@
-##operation.getAllField·½·¨ÓÃÀ´Çø·ÖÊÇ·ñÊÇselect *¸ñÊ½ 
+##operation.getAllFieldï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½select *ï¿½ï¿½Ê½ 
 #if(${operation.getAllField()} < 0)
-##operation.getField·½·¨Ð¡ÓÚ0Ê±£¬ËµÃ÷²éÑ¯µÄ×Ö¶ÎÖ»ÓÐÒ»¸ö
+##operation.getFieldï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½0Ê±ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½Ö¶ï¿½Ö»ï¿½ï¿½Ò»ï¿½ï¿½
 #if(${operation.getField()} < 0) 
-##µ±·µ»ØÒ»¸ö×Ö¶ÎµÄÊ±ºò£¬Òª¿¼ÂÇ¸Ã×Ö¶ÎµÄ·µ»ØÖµÀàÐÍ
+##ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö¶Îµï¿½Ê±ï¿½ï¿½Òªï¿½ï¿½ï¿½Ç¸ï¿½ï¿½Ö¶ÎµÄ·ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
 #if (${operation.returnTypePrimitive})
-	 ##½«µÃµ½µÄStringÀàÐÍµÄÊýÖµ×ª³É»ù±¾Êý¾ÝÀàÐÍËù¶ÔÓ¦µÄÒýÓÃÊý¾ÝÀàÐÍ
+	 ##ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Stringï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½Öµ×ªï¿½É»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 ${operation.simpleReturnTypeForPrimitive} retObj = new ${operation.simpleReturnTypeForPrimitive}(finalStringValue);
-	 ##×ª³É»ù±¾Êý¾ÝÀàÐÍ
+	 ##×ªï¿½É»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	 return retObj.${operation.simpleReturnType}Value();
 		
 #else
@@ -16,7 +16,6 @@ ${operation.simpleReturnTypeForPrimitive} retObj = new ${operation.simpleReturnT
 #end 
 #else
 #if(${table.getTableConfig().bConfidentiality()} == true)
-##parse ("operation/dynamic-extends.vm")
        opDO.set$!{finalRet}(bytesToString);
           return opDO;
 #else 
@@ -25,7 +24,6 @@ ${operation.simpleReturnTypeForPrimitive} retObj = new ${operation.simpleReturnT
 #end
 #else
 	 #if(${table.getTableConfig().bConfidentiality()} == true)
-##parse ("operation/dynamic-extends.vm")
         opDO.set$!{finalRet}(bytesToString);
           return opDO;
 #else 

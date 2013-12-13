@@ -1,32 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <table sqlname="atom_topic" ticket="true">
-	<!-- ========================================== -->
-	<!-- 公用列名 -->
-	<!-- ========================================== -->
-    <!--
-	<column name="mapping_type" javatype="com.alipay.mdatasync.common.service.facade.enums.SplitRuleMapTypeEnum" />
-	-->
-    
-	<!-- ========================================== -->
-	<!-- 公用映射关系 -->
-	<!-- ========================================== -->
-	<!--
-    <resultmap name="McenterSplitRule-maxID">
-		<column name="user_id" javatype="java.lang.String" />
-	</resultmap>
-	-->
+	<!-- 参考文档: http://mybatis.github.io/mybatis-3/sqlmap-xml.html -->
 	
-	<sql id="abc">abc</sql>
+	<!-- ========================================== -->
+	<!-- 代码复制操作 -->
+	<!-- ========================================== -->
 	
-	<sql id="abcefg" escape="true">
+	<copy type="dto-import">
 	<![CDATA[
-		abcefg<efg & abcefg>abc
+	import java.util.List;
+	import java.util.ArrayList;
 	]]>
-	</sql>
+	</copy>
+	
+	<copy type="dto-body">
+	<![CDATA[
+	public static final String REPLYS_KEY = "replys";
+	
+	public void setReplys(List<ReplyDTO> replys) {
+		this.extData.put(REPLYS_KEY, replys);
+	}
+	
+	public List<ReplyDTO> getReplys() {
+		List<ReplyDTO> replys = this.findExtData(REPLYS_KEY);
+		
+		if(replys == null) {
+			replys = new ArrayList<ReplyDTO>();
+			this.extData.put(REPLYS_KEY, replys);
+		}
+		
+		return replys;
+	}
+	]]>
+	</copy>
+	
+	<!-- ========================================== -->
+	<!-- INSERT操作 -->
+	<!-- ========================================== -->
+	<operation name="insert">
+		<description>新增记录</description>
+		<sql>
+			INSERT INTO atom_topic(
+				id, state, catg, tflag, rflag, rfrom, mflag, mpath, mcount, treply, visit, reply, title, summary, content, gmt_create, gmt_modify
+			) VALUES(
+				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+			)
+		</sql>
+		<sqlmap>
+			INSERT INTO atom_topic(
+				id, state, catg, tflag, rflag, rfrom, mflag, mpath, mcount, treply, visit, reply, title, summary, content, gmt_create, gmt_modify
+			) VALUES(
+				#{id}, #{state}, #{catg}, #{tflag}, #{rflag}, #{rfrom}, #{mflag}, #{mpath}, #{mcount}, #{treply}, #{visit}, #{reply}, #{title}, #{summary}, #{content,jdbcType=VARCHAR}, NOW(), NOW()
+			)
+		</sqlmap>
+	</operation>
     
 	<!-- ========================================== -->
-	<!-- 数据表操作 -->
+	<!-- SELECT操作 -->
 	<!-- ========================================== -->
 	<operation name="find" multiplicity="one">
 		<description>查询单条记录</description>
@@ -41,7 +72,133 @@
 			SELECT * FROM atom_topic
 		</sql>
 	</operation>
+	
+	<operation name="findCatgPage" multiplicity="many">
+		<description>分页查询记录</description>
+		<extraparams>
+			<param name="catg" javatype="java.lang.String" />
+			<param name="offset" javatype="int" />
+			<param name="limit" javatype="int" />
+		</extraparams>
+		<sql>
+			SELECT * FROM atom_topic WHERE catg='CATG'
+		</sql>
+		<sqlmap>
+		<![CDATA[
+			SELECT * FROM atom_topic
+				<if test="catg != null">
+					WHERE catg=#{catg}
+				</if>
+			ORDER BY id DESC
+			LIMIT #{offset},#{limit}
+		]]>
+		</sqlmap>
+	</operation>
+	
+	<operation name="findCatgPageCount">
+		<description>分页查询记录统计</description>
+		<extraparams>
+			<param name="value" javatype="java.lang.String" />
+		</extraparams>
+		<sql>
+			SELECT COUNT(*) FROM atom_topic WHERE catg='CATG'
+		</sql>
+		<sqlmap>
+		<![CDATA[
+			SELECT COUNT(*) FROM atom_topic
+				<if test="value != null">
+					WHERE catg=#{value}
+				</if>
+		]]>
+		</sqlmap>
+	</operation>
+	
+	<operation name="findTopVisit" multiplicity="many">
+		<description>查询最新阅读榜</description>
+		<extraparams>
+			<param name="catg" javatype="java.lang.String" />
+			<param name="size" javatype="int" />
+		</extraparams>
+		<sql>
+			SELECT * FROM atom_topic WHERE catg='CATG'
+		</sql>
+		<sqlmap>
+		<![CDATA[
+			SELECT * FROM atom_topic
+				<if test="catg != null">
+					WHERE catg=#{catg}
+				</if>
+			ORDER BY visit DESC
+			LIMIT 0,#{size}
+		]]>
+		</sqlmap>
+	</operation>
+	
+	<operation name="findTopReply" multiplicity="many">
+		<description>查询最新评论榜</description>
+		<extraparams>
+			<param name="catg" javatype="java.lang.String" />
+			<param name="size" javatype="int" />
+		</extraparams>
+		<sql>
+			SELECT * FROM atom_topic WHERE catg='CATG'
+		</sql>
+		<sqlmap>
+		<![CDATA[
+			SELECT * FROM atom_topic
+				<if test="catg != null">
+					WHERE catg=#{catg}
+				</if>
+			ORDER BY reply DESC
+			LIMIT 0,#{size}
+		]]>
+		</sqlmap>
+	</operation>
     
+    <!-- ========================================== -->
+	<!-- UPDATE操作 -->
+	<!-- ========================================== -->
+    <operation name="update" paramtype="object">
+		<description>更新主题</description>
+		<sql>
+			UPDATE atom_topic SET catg=?, tflag=?, rflag=?, rfrom=?, mflag=?, mpath=?, treply=?, title=?, summary=?, content=? WHERE id=?
+		</sql>
+		<sqlmap>
+			UPDATE atom_topic SET catg=#{catg}, tflag=#{tflag}, rflag=#{rflag}, rfrom=#{rfrom}, mflag=#{mflag}, mpath=#{mpath}, treply=#{treply}, title=#{title}, summary=#{summary}, content=#{content,jdbcType=VARCHAR}, gmt_modify=NOW() WHERE id=#{id}
+		</sqlmap>
+	</operation>
+	
+	<operation name="updateVisit">
+		<description>增加主题访问次数</description>
+		<extraparams>
+			<param name="id" javatype="long" />
+			<param name="count" javatype="int" />
+		</extraparams>
+		<sql>
+			UPDATE atom_topic SET visit='visit+1', gmt_modify='NOW' WHERE id='1'
+		</sql>
+		<sqlmap>
+			UPDATE atom_topic SET visit=visit+#{count}, gmt_modify=NOW() WHERE id=#{id}
+		</sqlmap>
+	</operation>
+	
+	<operation name="updateReply">
+		<description>增加主题评论次数</description>
+		<extraparams>
+			<param name="id" javatype="long" />
+			<param name="count" javatype="int" />
+		</extraparams>
+		<sql>
+			UPDATE atom_topic SET reply='reply+1', gmt_modify='NOW' WHERE id='1'
+		</sql>
+		<sqlmap>
+			UPDATE atom_topic SET reply=reply+#{count}, gmt_modify=NOW() WHERE id=#{id}
+		</sqlmap>
+	</operation>
+	
+	<!-- ========================================== -->
+	<!-- DELETE操作 -->
+	<!-- ========================================== -->
     <operation name="delete">
 		<description>删除用户信息</description>
 		<sql>

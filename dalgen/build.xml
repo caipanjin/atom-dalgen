@@ -55,10 +55,10 @@
 		<middlegen configfile="${middlegen.config.file}" tabs="${tabs}" prefsdir="${dir.target}">
 			<iwallet destination="" mergedir="${middlegen.templates}/mergedir" package="${middlegen.package}">
 				<!-- 生成数据对象(DataObject)基类 -->
-				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/base-do.vm" filename="dal/dto/BaseDO.java" />
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/base-dto.vm" filename="dal/dto/BaseDTO.java" />
 
 				<!-- 为每一张表生成一个数据对象类 -->
-				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/do.vm" filename="dal/dto/{0}DO.java" />
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/dto.vm" filename="dal/dto/{0}DTO.java" />
                 
 				<!-- 为每一张表生成一个数据表字段类 -->
 				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/field.vm" filename="dal/field/{0}FieldEnum.java" />

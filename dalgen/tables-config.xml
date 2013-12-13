@@ -9,7 +9,10 @@
     <tableprefix prefix="atom" />
     <tableprefix prefix="mplat" />
 
+    <include table="tables/atom_catg.xml" />
     <include table="tables/atom_config.xml" />
+    <include table="tables/atom_crawl.xml" />
+    <include table="tables/atom_reply.xml" />
     <include table="tables/atom_topic.xml" />
     <include table="tables/atom_user.xml" />
 </tables>

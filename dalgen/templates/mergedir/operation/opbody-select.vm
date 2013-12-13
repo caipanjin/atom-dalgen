@@ -1,7 +1,75 @@
-##区分用户是否配置机密性及完整性字段
-##如果配置机密性及完整性
-#if((${table.getTableConfig().bConfidentiality()} == true)||(${table.getTableConfig().bIntegrity()} == true))
-#parse ("operation/opbody-select-new.vm")
+{
+	Profiler.enter("DAO: ${table.namespace}.${operation.name}");
+	try {
+#if (${operation.paramType} == "object")
+    	if (${operation.params.get(0).name} == null) {
+    		throw new IllegalArgumentException("Can't select by a null data object.");
+    	}
+
+#end
+## prepare parameters
+#if (${operation.params.size()} == 0)
+#set ($paramName = "null")
+
+#elseif (${operation.params.size()} == 1)
+#if (${operation.param.javaTypePrimitive})
+        ${operation.param.simpleJavaTypeForPrimitive} param = new ${operation.param.simpleJavaTypeForPrimitive}(${operation.param.name});
+#set ($paramName = "param")
+
 #else
-#parse ("operation/opbody-select-old.vm")
-#end	
+#set ($paramName = ${operation.param.name})
+
+#end
+#else
+        Map<String, Object> param = new HashMap<String, Object>();
+
+#foreach ($param in ${operation.params})
+#if ($param.javaTypeForPrimitive)
+        param.put("${param.name}", new ${param.simpleJavaTypeForPrimitive}(${param.name}));
+#else
+        param.put("${param.name}", ${param.name});
+#end
+#end
+#set ($paramName = "param")
+
+#end
+## execute query and return
+#if (! ${operation.paging})
+#if (${operation.multiplicity} == "one")
+#if (${operation.returnTypePrimitive})
+	    ${operation.simpleReturnTypeForPrimitive} retObj = (${operation.simpleReturnTypeForPrimitive}) this.getSqlSession().selectOne("${table.namespace}.${operation.name}", ${paramName});
+
+		if (retObj == null) {
+		    return ${operation.defaultReturnValue};
+		} else {
+		    return retObj.${operation.simpleReturnType}Value();
+		}
+#else
+        return this.getSqlSession().selectOne("${table.namespace}.${operation.name}", ${paramName});
+#end
+#else
+        return this.getSqlSession().selectList("${table.namespace}.${operation.name}", ${paramName});
+#end
+
+#else
+        Paginator paginator = new Paginator();
+        paginator.setItemsPerPage(pageSize);
+        paginator.setPage(pageNum);
+
+        paginator.setItems(((Integer) this.getSqlSession().selectOne("${operation.mappedStatementIdForCount}", ${paramName})).intValue());
+        
+        PageList  pageList = new PageList();
+        pageList.setPaginator(paginator);
+        
+        if (paginator.getBeginIndex() <= paginator.getItems()) {
+            ${paramName}.put("${operation.startRowName}", new Integer(paginator.getBeginIndex()));
+            ${paramName}.put("${operation.endRowName}", new Integer(paginator.getEndIndex()));
+            pageList.addAll(this.getSqlSession().selectList("${table.namespace}.${operation.name}", ${paramName}));
+        }
+        
+        return pageList;
+#end
+	} finally {
+		Profiler.release();
+	}
+}
