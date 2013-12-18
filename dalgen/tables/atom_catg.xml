@@ -95,7 +95,7 @@
 		</sql>
 		<sqlmap>
 			UPDATE atom_catg SET
-			top=#{top}, catg=#{catg}, sort=#{sort} name=#{name}, gmt_modify=NOW()
+			top=#{top}, catg=#{catg}, sort=#{sort}, name=#{name}, gmt_modify=NOW()
 			WHERE
 			id=#{id}
 		</sqlmap>
@@ -126,6 +126,13 @@
 		<description>删除单条记录</description>
 		<sql>
 			DELETE FROM atom_catg WHERE id=?
+		</sql>
+	</operation>
+	
+	<operation name="deleteAll">
+		<description>删除所有记录</description>
+		<sql>
+			DELETE FROM atom_catg WHERE id>=0
 		</sql>
 	</operation>
 

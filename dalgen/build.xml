@@ -61,9 +61,10 @@
 				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/dto.vm" filename="dal/dto/{0}DTO.java" />
                 
 				<!-- 为每一张表生成一个数据表字段类 -->
-				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/field.vm" filename="dal/field/{0}FieldEnum.java" />
-				                
-                <!-- 生成通用的DAO接口类 -->
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/field-enum.vm" filename="dal/field/{0}FieldEnum.java" />
+				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/field-const.vm" filename="dal/field/{0}Const.java" />              
+                
+				<!-- 生成通用的DAO接口类 -->
                 <fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/base-dao.vm" filename="dal/dao/BaseDAO.java" />
                 
 				<!-- 为每一张表生成一个DAO接口 -->

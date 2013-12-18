@@ -1,0 +1,16 @@
+#parse("copyright.vm")
+package ${table.package}.dal.field;
+
+/**
+ * A fields const object database table <tt>$table.sqlName</tt>.
+ */
+public interface ${table.baseClassName}Const {
+#foreach($column in $table.columns)
+#if ($column.simpleJavaType == "String")
+	//
+	public static final int $StringUtils.upperCase(${column.sqlName})_SIZE = ${column.size};
+#end
+#end
+    //
+
+}

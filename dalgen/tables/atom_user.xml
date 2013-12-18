@@ -1,11 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <table sqlname="atom_user" ticket="true">
+	<!-- 参考文档: http://mybatis.github.io/mybatis-3/sqlmap-xml.html -->
+	
 	<!-- ========================================== -->
-	<!-- 公用列名 -->
+	<!-- 代码复制操作 -->
 	<!-- ========================================== -->
-	<!-- <column name="mapping_type" javatype="com.alipay.mdatasync.common.service.facade.enums.SplitRuleMapTypeEnum" /> -->
+	
+	<copy type="dto-import">
+	<![CDATA[
+	import com.github.obullxl.jeesite.flag.UserBitFlag;
+	]]>
+	</copy>
+	
+	<copy type="dto-body">
+	<![CDATA[
+	/** 用户位标志 */
+    private UserBitFlag       bitFlag;
 
+    /**
+     * 获取用户位标志
+     */
+    public UserBitFlag findBitFlag() {
+        if (this.bitFlag == null) {
+            this.bitFlag = new UserBitFlag(this.uflag);
+        }
+
+        return this.bitFlag;
+    }
+    
+    /**
+     * 重置用户位标志
+     */
+    public void resetBitFlag() {
+        this.bitFlag = null;
+    }
+	]]>
+	</copy>
+	
 	<!-- ========================================== -->
 	<!-- 公用映射关系 -->
 	<!-- ========================================== -->
@@ -32,16 +64,16 @@
 		<description>新增记录</description>
 		<sql>
 			INSERT INTO atom_user(
-				id, uname, passwd, uemail, gmt_create, gmt_modify
+				id, uname, passwd, uemail, uflag, unick, gmt_create, gmt_modify
 			) VALUES(
-				?, ?, ?, ?, ?, ?
+				?, ?, ?, ?, ?, ?, ?, ?
 			)
 		</sql>
 		<sqlmap>
 			INSERT INTO atom_user(
-				id, uname, passwd, uemail, gmt_create, gmt_modify
+				id, uname, passwd, uemail, uflag, unick, gmt_create, gmt_modify
 			) VALUES(
-				#{id}, #{uname}, #{passwd}, #{uemail}, NOW(), NOW()
+				#{id}, #{uname}, #{passwd}, #{uemail}, #{uflag}, #{unick}, NOW(), NOW()
 			)
 		</sqlmap>
 	</operation>
@@ -90,10 +122,10 @@
 	<operation name="update" paramtype="object">
 		<description>更新用户</description>
 		<sql>
-			UPDATE atom_user SET passwd=?, uemail=? WHERE uname=?
+			UPDATE atom_user SET passwd=?, uemail=?, uflag=?, unick=? WHERE uname=?
 		</sql>
 		<sqlmap>
-			UPDATE atom_user SET passwd=#{passwd}, uemail=#{uemail}, gmt_modify=NOW() WHERE uname=#{uname}
+			UPDATE atom_user SET passwd=#{passwd}, uemail=#{uemail}, uflag=#{uflag}, unick=#{unick}, gmt_modify=NOW() WHERE uname=#{uname}
 		</sqlmap>
 	</operation>
 
