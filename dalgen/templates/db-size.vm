@@ -1,0 +1,21 @@
+#parse("copyright.vm")
+package ${plugin.package}.dal;
+
+/**
+ * A fields const object database.
+ */
+public interface DBSize {
+
+#foreach ($table in $plugin.sortedTables)
+	//
+	public static interface ${table.baseClassName} {
+#foreach($column in $table.columns)
+#if ($column.simpleJavaType == "String")
+		//
+		public static final int $StringUtils.upperCase(${column.sqlName})_MAX = ${column.size};
+#end
+#end
+	}
+	
+#end
+}

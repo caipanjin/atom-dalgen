@@ -48,8 +48,21 @@
 	<operation name="findAll" multiplicity="many">
 		<description>查询所有记录</description>
 		<sql>
-			SELECT * FROM atom_right
+			SELECT * FROM atom_right ORDER BY code ASC
 		</sql>
+	</operation>
+	
+	<operation name="findUserRgts" multiplicity="many">
+		<description>查询用户所有权限</description>
+		<extraparams>
+			<param name="value" javatype="java.lang.String" />
+		</extraparams>
+		<sql>
+			SELECT * FROM atom_right WHERE code='user-rgt-codes'
+		</sql>
+		<sqlmap>
+			SELECT * FROM atom_right WHERE code IN (SELECT rgt_code FROM atom_user_rgt WHERE name=#{value}) ORDER BY code ASC
+		</sqlmap>
 	</operation>
 
 	<!-- ========================================== -->

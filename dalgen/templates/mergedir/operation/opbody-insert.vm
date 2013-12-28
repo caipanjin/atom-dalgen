@@ -8,9 +8,13 @@
     	
 #if(${table.ticket})
         try {
+#if(${table.fmtNo})
+            ${operation.param.name}.${table.iwPkColumn.setterName}(this.ticketEncode.encode(this.ticketService.nextValue()));
+#else
             ${operation.param.name}.${table.iwPkColumn.setterName}(this.ticketService.nextValue());
+#end
         } catch (TicketException e) {
-            throw new RuntimeException("Set TicketID exception.", e);
+            throw new RuntimeException("Set PrimaryKey exception.", e);
         }
 #end
 

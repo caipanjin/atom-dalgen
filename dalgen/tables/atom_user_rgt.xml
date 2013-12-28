@@ -35,6 +35,13 @@
 	<!-- ========================================== -->
 	<!-- SELECT操作 -->
 	<!-- ========================================== -->
+	<operation name="find" multiplicity="one">
+		<description>查询所有记录</description>
+		<sql>
+			SELECT * FROM atom_user_rgt WHERE name=? AND rgt_code=?
+		</sql>
+	</operation>
+	
 	<operation name="findAll" multiplicity="many">
 		<description>查询所有记录</description>
 		<sql>

@@ -10,8 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.atom.dalgen.utils.LogUtils;
-
 /**
  * A bean class represents an iwallet table configuration.
  */
@@ -46,6 +44,15 @@ public class IWalletTableConfig {
 
     /** 票据ID */
     private boolean                          ticket;
+
+    /** 票据名称 */
+    private String                           ticketName;
+
+    /** 票据转换 */
+    private boolean                          fmtNo;
+
+    /** 票据转换Bean名称 */
+    private String                           fmtNoName;
 
     /** a list of all public sqls. */
     private List<IWalletSqlConfig>           sqls       = new ArrayList<IWalletSqlConfig>();
@@ -318,6 +325,30 @@ public class IWalletTableConfig {
 
     public void setTicket(boolean ticket) {
         this.ticket = ticket;
+    }
+
+    public String getTicketName() {
+        return ticketName;
+    }
+
+    public void setTicketName(String ticketName) {
+        this.ticketName = ticketName;
+    }
+
+    public boolean isFmtNo() {
+        return fmtNo;
+    }
+
+    public void setFmtNo(boolean fmtNo) {
+        this.fmtNo = fmtNo;
+    }
+
+    public String getFmtNoName() {
+        return fmtNoName;
+    }
+
+    public void setFmtNoName(String fmtNoName) {
+        this.fmtNoName = fmtNoName;
     }
 
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<table sqlname="atom_topic" ticket="true">
+<table sqlname="atom_topic" ticket="true" ticketName="TB-Topic-ID" fmtNo="true" fmtNoName="">
 	<!-- 参考文档: http://mybatis.github.io/mybatis-3/sqlmap-xml.html -->
 	
 	<!-- ========================================== -->
@@ -71,6 +71,19 @@
 		<sql>
 			SELECT * FROM atom_topic
 		</sql>
+	</operation>
+	
+	<operation name="findCatgOne" multiplicity="one">
+		<description>查询单条分类主题记录</description>
+		<extraparams>
+			<param name="value" javatype="java.lang.String" />
+		</extraparams>
+		<sql>
+			SELECT * FROM atom_topic WHERE catg='catg'
+		</sql>
+		<sqlmap>
+			SELECT * FROM atom_topic WHERE catg=#{value} LIMIT 1
+		</sqlmap>
 	</operation>
 	
 	<operation name="findCatgPage" multiplicity="many">

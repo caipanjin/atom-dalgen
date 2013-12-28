@@ -11,8 +11,13 @@
 #if(${table.ticket})
 		<property name="ticketService">
 			<bean class="com.github.obullxl.ticket.support.DefaultTicketService" parent="abstractTicket">
-				<property name="name" value="TB-${table.baseClassName}-ID" />
+				<property name="name" value="${table.ticketName}" />
 			</bean>
+    	</property>
+#end
+#if(${table.fmtNo})
+		<property name="ticketEncode">
+			<bean class="${table.fmtNoName}" />
     	</property>
 #end
     </bean>

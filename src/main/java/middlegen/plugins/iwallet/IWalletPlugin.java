@@ -40,7 +40,7 @@ import org.apache.commons.lang.StringUtils;
 public class IWalletPlugin extends JavaPlugin {
 
     /** the class name of Money */
-    public static final String MONEY_CLASS                 = "com.iwallet.biz.common.util.money.Money";
+    public static final String MONEY_CLASS                 = "com.github.obullxl.lang.Money";
 
     /** the result map name for Money */
     public static final String MONEY_RESULT_MAP_ID         = "RM-MONEY";

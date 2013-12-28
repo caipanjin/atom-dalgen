@@ -132,6 +132,7 @@ public class IWalletConfig {
                 digester.addSetProperties("table", "autoswitchdatasrc", "autoSwitchDataSrc");
                 // 虚拟主键配置，insert时，当无主键或多主键时，虚拟字段为主键
                 digester.addSetProperties("table", "dummypk", "dummyPk");
+                
                 // 票据ID
                 digester.addSetProperties("table", "ticket", "ticket");
 

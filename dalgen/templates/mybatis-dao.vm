@@ -20,6 +20,9 @@ import com.github.obullxl.ticket.TicketService;
 import com.github.obullxl.ticket.api.TicketException;
 #end
 #end
+#if(${table.fmtNo})
+import com.github.obullxl.ticket.fmt.TicketEncode;
+#end
 import com.github.obullxl.lang.Profiler;
 
 /**
@@ -38,6 +41,15 @@ public class ${table.ibatisClassName} extends org.mybatis.spring.support.SqlSess
 	public TicketService getTicketService() {
         return ticketService;
     }
+#end
+
+#if(${table.fmtNo})
+	/** Ticket Encoder */
+	private TicketEncode ticketEncode;
+	
+	public void setTicketEncode(TicketEncode ticketEncode) {
+		this.ticketEncode = ticketEncode;
+	}
 #end
 
 #foreach($operation in $table.operations)

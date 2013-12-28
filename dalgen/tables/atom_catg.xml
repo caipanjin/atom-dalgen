@@ -15,7 +15,7 @@
 	]]>
 	</copy>
 	
-		<copy type="dto-body">
+	<copy type="dto-body">
 	<![CDATA[
     /** parent */
     private CatgDTO           parent;
@@ -116,6 +116,26 @@
 		<sql>
 			SELECT * FROM atom_catg ORDER BY sort ASC
 		</sql>
+	</operation>
+	
+	<operation name="findName" multiplicity="one">
+		<description>查询单条记录</description>
+		<sql>
+			SELECT * FROM atom_catg WHERE name=?
+		</sql>
+	</operation>
+	
+	<operation name="findCatg" multiplicity="one">
+		<description>查询单条记录</description>
+		<extraparams>
+			<param name="value" javatype="long" />
+		</extraparams>
+		<sql>
+			SELECT * FROM atom_catg WHERE catg='catg'
+		</sql>
+		<sqlmap>
+			SELECT * FROM atom_catg WHERE catg=#{value} LIMIT 1
+		</sqlmap>
 	</operation>
 
 	<!-- ========================================== -->

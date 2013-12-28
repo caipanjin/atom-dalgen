@@ -3,6 +3,50 @@
 <table sqlname="atom_config" ticket="true">
 	<!-- 参考文档: http://mybatis.github.io/mybatis-3/sqlmap-xml.html -->
 	
+	<copy type="dto-import">
+	<![CDATA[
+	import java.util.Comparator;
+	import org.apache.commons.lang.StringUtils;
+	import com.github.obullxl.jeesite.web.enums.TrueFalseEnum;
+	]]>
+	</copy>
+	
+	<copy type="dto-body">
+	<![CDATA[
+	/**
+	 * 是否有效
+	 */
+	public boolean isActive() {
+        TrueFalseEnum enm = TrueFalseEnum.findByCode(this.state);
+        if (enm != TrueFalseEnum.TRUE) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    /**
+     * 排序比较器
+     */
+    public static final Comparator<ConfigDTO> COMPARATOR       = new Comparator<ConfigDTO>() {
+        public int compare(ConfigDTO src, ConfigDTO dst) {
+            if (src == null) {
+                return -1;
+            }
+
+            if (dst == null) {
+                return 1;
+            }
+
+            String scatg = StringUtils.trimToEmpty(src.getCatg()) + StringUtils.trimToEmpty(src.getName());
+            String dcatg = StringUtils.trimToEmpty(dst.getCatg()) + StringUtils.trimToEmpty(dst.getName());
+
+            return scatg.compareTo(dcatg);
+        }
+    };
+	]]>
+	</copy>
+	
     <!-- ========================================== -->
 	<!-- INSERT操作 -->
 	<!-- ========================================== -->

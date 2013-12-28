@@ -502,7 +502,32 @@ public class IWalletTable extends JavaTable implements Comparable {
     }
 
     public boolean isTicket() {
-        return tableConfig.isTicket();
+        return this.tableConfig.isTicket();
+    }
+
+    /**
+     * TB-${table.baseClassName}-ID
+     */
+    public String getTicketName() {
+        String ticketName = this.tableConfig.getTicketName();
+        if (StringUtils.isBlank(ticketName)) {
+            ticketName = "TB-" + this.getBaseClassName() + "-ID";
+        }
+
+        return ticketName;
+    }
+
+    public boolean isFmtNo() {
+        return this.tableConfig.isFmtNo();
+    }
+
+    public String getFmtNoName() {
+        String fmtNoName = this.tableConfig.getFmtNoName();
+        if (StringUtils.isBlank(fmtNoName)) {
+            fmtNoName = "com.github.obullxl.ticket.support.DefaultTicketEncode";
+        }
+
+        return fmtNoName;
     }
 
     /**
