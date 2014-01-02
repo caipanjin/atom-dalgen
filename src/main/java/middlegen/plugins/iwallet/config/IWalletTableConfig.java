@@ -54,6 +54,9 @@ public class IWalletTableConfig {
     /** 票据转换Bean名称 */
     private String                           fmtNoName;
 
+    /** 是否生成开关值 */
+    private boolean                          valve;
+
     /** a list of all public sqls. */
     private List<IWalletSqlConfig>           sqls       = new ArrayList<IWalletSqlConfig>();
 
@@ -349,6 +352,14 @@ public class IWalletTableConfig {
 
     public void setFmtNoName(String fmtNoName) {
         this.fmtNoName = fmtNoName;
+    }
+
+    public boolean isValve() {
+        return valve;
+    }
+
+    public void setValve(boolean valve) {
+        this.valve = valve;
     }
 
 }

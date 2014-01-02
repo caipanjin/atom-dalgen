@@ -1,39 +1,8 @@
-/*
- * Copyright (c) 2001, Aslak Helles酶y, BEKK Consulting
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * - Redistributions of source code must retain the above copyright notice,
- *   this list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * - Neither the name of BEKK Consulting nor the names of its
- *   contributors may be used to endorse or promote products derived from
- *   this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
- * DAMAGE.
- */
 package middlegen;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -71,20 +40,14 @@ import com.atom.dalgen.utils.Utils;
 public final class FileProducer {
     private static final String       VALIDATOR_ROOT_PATH = "middlegen.validator.impl.";
 
-    /**
-     * @todo-javadoc Describe the field
-     */
     private File                      _destinationDir;
 
-    /**
-     * @todo-javadoc Describe the field
-     */
     private String                    _destinationFileName;
 
-    /**
-     * @todo-javadoc Describe the field
-     */
     private URL                       _template;
+
+    /** 是否覆盖，默认为TRUE */
+    private boolean                   justNew;
 
     /**
      * @todo-javadoc Describe the field
@@ -148,19 +111,6 @@ public final class FileProducer {
 
     /**
      * Describe what the DefaultFileProducer constructor does
-     * 
-     * @todo-javadoc Write javadocs for method parameter
-     * @todo-javadoc Write javadocs for constructor
-     * @todo-javadoc Write javadocs for method parameter
-     * @todo-javadoc Write javadocs for method parameter
-     * @todo-javadoc Write javadocs for method parameter
-     * @todo-javadoc Write javadocs for method parameter
-     * @param destinationDir
-     *            Describe what the parameter does
-     * @param destinationFileName
-     *            Describe what the parameter does
-     * @param template
-     *            Describe what the parameter does
      */
     public FileProducer(File destinationDir, String destinationFileName, URL template) {
         _isCustom = false;
@@ -269,11 +219,6 @@ public final class FileProducer {
 
     /**
      * Describe what the method does
-     * 
-     * @todo-javadoc Write javadocs for method
-     * @todo-javadoc Write javadocs for exception
-     * @exception IllegalStateException
-     *                Describe the exception
      */
     public void validate() throws IllegalStateException {
         if (_template == null) {
@@ -511,22 +456,23 @@ public final class FileProducer {
             //sql注入漏洞验证
             // sqlInjectionValidate(tempFile);
 
-            // Compare to see if the new file is the same as the original one.
+            LogUtils.get().info("[文件生成]-文件[" + outputFile + "], 覆盖标志[" + this.justNew + "].");
+
             if (!outputFile.exists()) {
                 outputFile.getParentFile().mkdirs();
-                //add by yuanxiao---renameTo方法总是出错，改用commons-io包中的FileUtils类
                 FileUtils.copyFile(tempFile, outputFile);
-                // tempFile.renameTo(outputFile);
-            } else if (!DalUtil.contentEquals(tempFile, outputFile)) {
-                // 生成后执行校验
-
-                generateAfterValidate(tempFile, outputFile);
-                outputFile.delete();
-                //add by yuanxiao---renameTo方法总是出错，改用commons-io包中的FileUtils类
-                FileUtils.copyFile(tempFile, outputFile);
+            } else if (!this.justNew) {
+                if (!DalUtil.contentEquals(tempFile, outputFile)) {
+                    // 生成后执行校验
+                    generateAfterValidate(tempFile, outputFile);
+                    outputFile.delete();
+                    FileUtils.copyFile(tempFile, outputFile);
+                }
             } else {
-                tempFile.delete();
+                LogUtils.get().info("[文件生成]-文件[" + outputFile + "]已经存在, 忽略生成.");
             }
+            
+            tempFile.delete();
         } catch (IOException e) {
             LogUtils.get().error(e.getMessage(), e);
             throw new MiddlegenException(e.getMessage());
@@ -646,4 +592,14 @@ public final class FileProducer {
         getContextMap().put("confForUpdate", confForUpdate);
         getContextMap().put("integForUpdate", integForUpdate);
     }
+
+    public boolean isJustNew() {
+        return justNew;
+    }
+
+    public void setJustNew(boolean justNew) {
+        LogUtils.get().info("[生成设置]-强制覆盖标志-" + justNew);
+        this.justNew = justNew;
+    }
+
 }

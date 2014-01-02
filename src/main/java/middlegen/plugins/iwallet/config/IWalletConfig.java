@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -132,9 +131,13 @@ public class IWalletConfig {
                 digester.addSetProperties("table", "autoswitchdatasrc", "autoSwitchDataSrc");
                 // 虚拟主键配置，insert时，当无主键或多主键时，虚拟字段为主键
                 digester.addSetProperties("table", "dummypk", "dummyPk");
-                
+
                 // 票据ID
                 digester.addSetProperties("table", "ticket", "ticket");
+                digester.addSetProperties("table", "ticketName", "ticketName");
+                digester.addSetProperties("table", "fmtNo", "fmtNo");
+                digester.addSetProperties("table", "fmtNoName", "fmtNoName");
+                digester.addSetProperties("table", "valve", "valve");
 
                 // parse column
                 // IWalletColumenConfig类表示列的名称和类型

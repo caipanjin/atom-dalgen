@@ -13,6 +13,10 @@ import $importClass;
 #end
 #end
 
+#if($table.valve)
+import ${table.package}.dal.valve.${table.baseClassName}Valve;
+#end
+
 /**
  * A data object class directly models database table <tt>$table.sqlName</tt>.
  */
@@ -23,6 +27,30 @@ public class ${table.baseClassName}DTO extends BaseDTO {
 #if(${copy.type} == 'dto-body')
 	${copy.copy}
 #end
+#end
+
+#if($table.valve)
+	/** 开关值 */
+	private ${table.baseClassName}Valve valve;
+	
+	/**
+     * 获取开关值
+     */
+    public ${table.baseClassName}Valve findValve() {
+        if (this.valve == null) {
+            this.valve = new ${table.baseClassName}Valve(this);
+        }
+
+        return this.valve;
+    }
+    
+    /**
+     * 重置开关值
+     */
+    public ${table.baseClassName}DTO resetValve() {
+        this.valve = null;
+		return this;
+    }
 #end
 
 #parse("do-fields.vm")

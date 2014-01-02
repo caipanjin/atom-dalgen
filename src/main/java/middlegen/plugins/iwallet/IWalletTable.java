@@ -530,6 +530,10 @@ public class IWalletTable extends JavaTable implements Comparable {
         return fmtNoName;
     }
 
+    public boolean isValve() {
+        return this.tableConfig.isValve();
+    }
+
     /**
      * @return
      */

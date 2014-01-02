@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<table sqlname="atom_topic" ticket="true" ticketName="TB-Topic-ID" fmtNo="true" fmtNoName="">
+<table sqlname="atom_topic" ticket="true" ticketName="TB-Topic-ID" fmtNo="true" fmtNoName="" valve="true">
 	<!-- 参考文档: http://mybatis.github.io/mybatis-3/sqlmap-xml.html -->
 	
 	<!-- ========================================== -->
@@ -36,22 +36,60 @@
 	</copy>
 	
 	<!-- ========================================== -->
+	<!-- 通用SQL代码块 -->
+	<!-- ========================================== -->
+	<sql id="fieldTitle">
+		id, flag, catg, link_url, media_url, visit_cnt, reply_cnt, title, '' AS summary, '' AS content, gmt_create, gmt_modify
+	</sql>
+	
+	<sql id="findFuzzy-WHERE">
+	<![CDATA[
+		<where>
+			<if test="id != null">
+				AND id=#{id}
+			</if>
+			<if test="state != null">
+				AND SUBSTRING(flag, 1, 1)=#{state}
+			</if>
+			<if test="catgs != null">
+				AND catg IN
+				<foreach item="itm" index="idx" collection="catgs" open="(" separator="," close=")">#{itm}</foreach>
+			</if>
+			<if test="title != null">
+				AND title LIKE #{title}
+			</if>
+		</where>
+	]]>
+	</sql>
+	
+	<sql id="findTopXXX-WHERE">
+	<![CDATA[
+		<where>
+			<if test="catgs != null">
+				AND catg IN
+				<foreach item="itm" index="idx" collection="catgs" open="(" separator="," close=")">#{itm}</foreach>
+			</if>
+		</where>
+	]]>
+	</sql>
+	
+	<!-- ========================================== -->
 	<!-- INSERT操作 -->
 	<!-- ========================================== -->
 	<operation name="insert">
 		<description>新增记录</description>
 		<sql>
 			INSERT INTO atom_topic(
-				id, state, catg, tflag, rflag, rfrom, mflag, mpath, mcount, treply, visit, reply, title, summary, content, gmt_create, gmt_modify
+				id, flag, catg, link_url, media_url, visit_cnt, reply_cnt, title, summary, content, gmt_create, gmt_modify
 			) VALUES(
-				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 			)
 		</sql>
 		<sqlmap>
 			INSERT INTO atom_topic(
-				id, state, catg, tflag, rflag, rfrom, mflag, mpath, mcount, treply, visit, reply, title, summary, content, gmt_create, gmt_modify
+				id, flag, catg, link_url, media_url, visit_cnt, reply_cnt, title, summary, content, gmt_create, gmt_modify
 			) VALUES(
-				#{id}, #{state}, #{catg}, #{tflag}, #{rflag}, #{rfrom}, #{mflag}, #{mpath}, #{mcount}, #{treply}, #{visit}, #{reply}, #{title}, #{summary}, #{content,jdbcType=VARCHAR}, NOW(), NOW()
+				#{id}, #{flag}, #{catg}, #{linkUrl}, #{mediaUrl}, #{visitCnt}, #{replyCnt}, #{title}, #{summary}, #{content,jdbcType=VARCHAR}, NOW(), NOW()
 			)
 		</sqlmap>
 	</operation>
@@ -76,52 +114,51 @@
 	<operation name="findCatgOne" multiplicity="one">
 		<description>查询单条分类主题记录</description>
 		<extraparams>
-			<param name="value" javatype="java.lang.String" />
+			<param name="catgs" javatype="java.util.List" />
 		</extraparams>
 		<sql>
 			SELECT * FROM atom_topic WHERE catg='catg'
 		</sql>
 		<sqlmap>
-			SELECT * FROM atom_topic WHERE catg=#{value} LIMIT 1
-		</sqlmap>
-	</operation>
-	
-	<operation name="findCatgPage" multiplicity="many">
-		<description>分页查询记录</description>
-		<extraparams>
-			<param name="catg" javatype="java.lang.String" />
-			<param name="offset" javatype="int" />
-			<param name="limit" javatype="int" />
-		</extraparams>
-		<sql>
-			SELECT * FROM atom_topic WHERE catg='CATG'
-		</sql>
-		<sqlmap>
 		<![CDATA[
 			SELECT * FROM atom_topic
-				<if test="catg != null">
-					WHERE catg=#{catg}
-				</if>
-			ORDER BY id DESC
-			LIMIT #{offset},#{limit}
+			WHERE catg IN
+				<foreach item="itm" index="idx" collection="list" open="(" separator="," close=")">#{itm}</foreach>
+			LIMIT 1
 		]]>
 		</sqlmap>
 	</operation>
 	
-	<operation name="findCatgPageCount">
-		<description>分页查询记录统计</description>
+	<operation name="findFuzzy" multiplicity="many">
+		<description>模糊分页查询记录</description>
 		<extraparams>
-			<param name="value" javatype="java.lang.String" />
+			<param name="args" javatype="com.github.obullxl.jeesite.dal.query.TopicQuery" />
 		</extraparams>
 		<sql>
-			SELECT COUNT(*) FROM atom_topic WHERE catg='CATG'
+			SELECT * FROM atom_topic WHERE id='ID' AND catg='CATG' AND title='TITLE'
+		</sql>
+		<sqlmap>
+		<![CDATA[
+			SELECT * FROM atom_topic
+				<include refid="findFuzzy-WHERE" />
+			ORDER BY id DESC
+			LIMIT #{offset},#{pageSize}
+		]]>
+		</sqlmap>
+	</operation>
+	
+	<operation name="findFuzzyCount">
+		<description>模糊分页查询记录统计</description>
+		<extraparams>
+			<param name="args" javatype="com.github.obullxl.jeesite.dal.query.TopicQuery" />
+		</extraparams>
+		<sql>
+			SELECT COUNT(*) FROM atom_topic WHERE id='ID' AND catg='CATG' AND title='TITLE'
 		</sql>
 		<sqlmap>
 		<![CDATA[
 			SELECT COUNT(*) FROM atom_topic
-				<if test="value != null">
-					WHERE catg=#{value}
-				</if>
+				<include refid="findFuzzy-WHERE" />
 		]]>
 		</sqlmap>
 	</operation>
@@ -129,7 +166,7 @@
 	<operation name="findTopVisit" multiplicity="many">
 		<description>查询最新阅读榜</description>
 		<extraparams>
-			<param name="catg" javatype="java.lang.String" />
+			<param name="catgs" javatype="java.util.List" />
 			<param name="size" javatype="int" />
 		</extraparams>
 		<sql>
@@ -137,10 +174,8 @@
 		</sql>
 		<sqlmap>
 		<![CDATA[
-			SELECT * FROM atom_topic
-				<if test="catg != null">
-					WHERE catg=#{catg}
-				</if>
+			SELECT <include refid="fieldTitle" /> FROM atom_topic
+				<include refid="findTopXXX-WHERE" />
 			ORDER BY visit DESC
 			LIMIT 0,#{size}
 		]]>
@@ -150,7 +185,7 @@
 	<operation name="findTopReply" multiplicity="many">
 		<description>查询最新评论榜</description>
 		<extraparams>
-			<param name="catg" javatype="java.lang.String" />
+			<param name="catgs" javatype="java.util.List" />
 			<param name="size" javatype="int" />
 		</extraparams>
 		<sql>
@@ -158,10 +193,8 @@
 		</sql>
 		<sqlmap>
 		<![CDATA[
-			SELECT * FROM atom_topic
-				<if test="catg != null">
-					WHERE catg=#{catg}
-				</if>
+			SELECT <include refid="fieldTitle" /> FROM atom_topic
+				<include refid="findTopXXX-WHERE" />
 			ORDER BY reply DESC
 			LIMIT 0,#{size}
 		]]>
@@ -174,38 +207,38 @@
     <operation name="update" paramtype="object">
 		<description>更新主题</description>
 		<sql>
-			UPDATE atom_topic SET catg=?, tflag=?, rflag=?, rfrom=?, mflag=?, mpath=?, treply=?, title=?, summary=?, content=? WHERE id=?
+			UPDATE atom_topic SET flag=?, catg=?, link_url=?, media_url=?, title=?, summary=?, content=? WHERE id=?
 		</sql>
 		<sqlmap>
-			UPDATE atom_topic SET catg=#{catg}, tflag=#{tflag}, rflag=#{rflag}, rfrom=#{rfrom}, mflag=#{mflag}, mpath=#{mpath}, treply=#{treply}, title=#{title}, summary=#{summary}, content=#{content,jdbcType=VARCHAR}, gmt_modify=NOW() WHERE id=#{id}
+			UPDATE atom_topic SET flag=#{flag}, catg=#{catg}, link_url=#{linkUrl}, media_url=#{mediaUrl}, title=#{title}, summary=#{summary}, content=#{content,jdbcType=VARCHAR}, gmt_modify=NOW() WHERE id=#{id}
 		</sqlmap>
 	</operation>
 	
 	<operation name="updateVisit">
 		<description>增加主题访问次数</description>
 		<extraparams>
-			<param name="id" javatype="long" />
+			<param name="id" javatype="java.lang.String" />
 			<param name="count" javatype="int" />
 		</extraparams>
 		<sql>
-			UPDATE atom_topic SET visit='visit+1', gmt_modify='NOW' WHERE id='1'
+			UPDATE atom_topic SET visit_cnt='visit+1', gmt_modify='NOW' WHERE id='1'
 		</sql>
 		<sqlmap>
-			UPDATE atom_topic SET visit=visit+#{count}, gmt_modify=NOW() WHERE id=#{id}
+			UPDATE atom_topic SET visit_cnt=visit_cnt+#{count}, gmt_modify=NOW() WHERE id=#{id}
 		</sqlmap>
 	</operation>
 	
 	<operation name="updateReply">
 		<description>增加主题评论次数</description>
 		<extraparams>
-			<param name="id" javatype="long" />
+			<param name="id" javatype="java.lang.String" />
 			<param name="count" javatype="int" />
 		</extraparams>
 		<sql>
-			UPDATE atom_topic SET reply='reply+1', gmt_modify='NOW' WHERE id='1'
+			UPDATE atom_topic SET reply_cnt='reply+1', gmt_modify='NOW' WHERE id='1'
 		</sql>
 		<sqlmap>
-			UPDATE atom_topic SET reply=reply+#{count}, gmt_modify=NOW() WHERE id=#{id}
+			UPDATE atom_topic SET reply_cnt=reply_cnt+#{count}, gmt_modify=NOW() WHERE id=#{id}
 		</sqlmap>
 	</operation>
 	

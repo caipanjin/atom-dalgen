@@ -69,16 +69,16 @@
 		<description>新增记录</description>
 		<sql>
 			INSERT INTO atom_catg(
-			id, top, catg, sort, name, gmt_create, gmt_modify
+			id, code, top, catg, sort, name, gmt_create, gmt_modify
 			) VALUES(
-			?, ?, ?, ?, ?, ?, ?
+			?, ?, ?, ?, ?, ?, ?, ?
 			)
 		</sql>
 		<sqlmap>
 			INSERT INTO atom_catg(
-			id, top, catg, sort, name, gmt_create, gmt_modify
+			id, code, top, catg, sort, name, gmt_create, gmt_modify
 			) VALUES(
-			#{id}, #{top}, #{catg}, #{sort}, #{name}, NOW(), NOW()
+			#{id}, #{code}, #{top}, #{catg}, #{sort}, #{name}, NOW(), NOW()
 			)
 		</sqlmap>
 	</operation>
@@ -89,13 +89,13 @@
 	<operation name="update" paramtype="object">
 		<sql>
 			UPDATE atom_catg SET
-			top=?, catg=?, sort=?, name=?, gmt_modify=?
+			code=?, top=?, catg=?, sort=?, name=?, gmt_modify=?
 			WHERE
 			id=?
 		</sql>
 		<sqlmap>
 			UPDATE atom_catg SET
-			top=#{top}, catg=#{catg}, sort=#{sort}, name=#{name}, gmt_modify=NOW()
+			code=#{code}, top=#{top}, catg=#{catg}, sort=#{sort}, name=#{name}, gmt_modify=NOW()
 			WHERE
 			id=#{id}
 		</sqlmap>
@@ -115,6 +115,13 @@
 		<description>查询所有记录</description>
 		<sql>
 			SELECT * FROM atom_catg ORDER BY sort ASC
+		</sql>
+	</operation>
+	
+	<operation name="findCode" multiplicity="one">
+		<description>查询单条记录</description>
+		<sql>
+			SELECT * FROM atom_catg WHERE code=?
 		</sql>
 	</operation>
 	

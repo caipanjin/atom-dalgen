@@ -1,0 +1,31 @@
+#parse("copyright.vm")
+package ${table.package}.dal.valve;
+
+import ${table.package}.dal.dto.${table.baseClassName}DTO;
+import com.github.obullxl.lang.FlagValve;
+
+/**
+ * Valve for ${table.baseClassName}DTO.
+ */
+public class ${table.baseClassName}Valve extends FlagValve {
+
+    /** The object class. */
+	private final ${table.baseClassName}DTO object;
+	
+	/**
+	 * CTOR
+	 */
+	public ${table.baseClassName}Valve(${table.baseClassName}DTO object) {
+	    this.object = object;
+	}
+
+	/**
+	 * Getter for object.
+	 */
+    public ${table.baseClassName}DTO getObject() {
+        return this.object;
+    }
+	
+	// Custome codes.
+	
+}

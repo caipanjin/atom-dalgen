@@ -128,8 +128,7 @@ public class IWalletPlugin extends JavaPlugin {
         }
     }
 
-    /**
-     * @throws Exception 
+    /** 
      * @see middlegen.Plugin#generate()
      */
     protected void generate() throws MiddlegenException {
