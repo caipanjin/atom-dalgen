@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<table sqlname="atom_topic" ticket="true" ticketName="TB-Topic-ID" fmtNo="true" fmtNoName="" valve="true">
+<table sqlname="atom_topic" ticket="true" ticketName="TB-Topic-ID" fmtNo="true" fmtNoName="com.github.obullxl.jeesite.dal.ticket.TopicTicketEncode" valve="true">
 	<!-- 参考文档: http://mybatis.github.io/mybatis-3/sqlmap-xml.html -->
 	
 	<!-- ========================================== -->
@@ -41,6 +41,9 @@
 	<sql id="fieldTitle">
 		id, flag, catg, link_url, media_url, visit_cnt, reply_cnt, title, '' AS summary, '' AS content, gmt_create, gmt_modify
 	</sql>
+	<sql id="fieldSummary">
+		id, flag, catg, link_url, media_url, visit_cnt, reply_cnt, title, summary, '' AS content, gmt_create, gmt_modify
+	</sql>
 	
 	<sql id="findFuzzy-WHERE">
 	<![CDATA[
@@ -50,6 +53,18 @@
 			</if>
 			<if test="state != null">
 				AND SUBSTRING(flag, 1, 1)=#{state}
+			</if>
+			<if test="top != null">
+				AND SUBSTRING(flag, 2, 1)=#{top}
+			</if>
+			<if test="link != null">
+				AND SUBSTRING(flag, 3, 1)=#{link}
+			</if>
+			<if test="media != null">
+				AND SUBSTRING(flag, 4, 1)=#{media}
+			</if>
+			<if test="reply != null">
+				AND SUBSTRING(flag, 5, 1)=#{reply}
 			</if>
 			<if test="catgs != null">
 				AND catg IN
@@ -109,6 +124,11 @@
 		<sql>
 			SELECT * FROM atom_topic
 		</sql>
+		<sqlmap>
+		<![CDATA[
+			SELECT <include refid="fieldTitle" /> FROM atom_topic
+		]]>
+		</sqlmap>
 	</operation>
 	
 	<operation name="findCatgOne" multiplicity="one">
@@ -139,7 +159,7 @@
 		</sql>
 		<sqlmap>
 		<![CDATA[
-			SELECT * FROM atom_topic
+			SELECT <include refid="fieldSummary" /> FROM atom_topic
 				<include refid="findFuzzy-WHERE" />
 			ORDER BY id DESC
 			LIMIT #{offset},#{pageSize}
@@ -176,7 +196,7 @@
 		<![CDATA[
 			SELECT <include refid="fieldTitle" /> FROM atom_topic
 				<include refid="findTopXXX-WHERE" />
-			ORDER BY visit DESC
+			ORDER BY visit_cnt DESC
 			LIMIT 0,#{size}
 		]]>
 		</sqlmap>
@@ -195,7 +215,7 @@
 		<![CDATA[
 			SELECT <include refid="fieldTitle" /> FROM atom_topic
 				<include refid="findTopXXX-WHERE" />
-			ORDER BY reply DESC
+			ORDER BY reply_cnt DESC
 			LIMIT 0,#{size}
 		]]>
 		</sqlmap>

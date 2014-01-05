@@ -12,6 +12,7 @@
     <include table="tables/atom_catg.xml" />
     <include table="tables/atom_config.xml" />
     <include table="tables/atom_crawl.xml" />
+    <include table="tables/atom_image.xml" />
     <include table="tables/atom_reply.xml" />
     <include table="tables/atom_right.xml" />
     <include table="tables/atom_topic.xml" />
