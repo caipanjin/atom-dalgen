@@ -26,9 +26,10 @@ public final class Utils {
 
         utils.put("IOUtils", new IOUtils());
         utils.put("StringUtils", new StringUtils());
-        
+
+        utils.put("CfgUtils", new CfgUtils());
         utils.put("IndexUtils", new IndexUtils());
-        
+
         return utils;
     }
 

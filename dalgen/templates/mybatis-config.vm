@@ -9,7 +9,7 @@
 
 	<mappers>
 #foreach ($table in $plugin.sortedTables)
-		<mapper resource="mybatis/jeesite/${table.baseClassName}-mapper.xml" />
+		<mapper resource="mybatis/${CfgUtils.findValue("app.name")}/${CfgUtils.findValue("app.dbtype")}/${table.baseClassName}-mapper.xml" />
 #end
 	</mappers>
 </configuration>

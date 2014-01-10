@@ -81,7 +81,7 @@
 				<fileproducer destination="${middlegen.destination}/java/${middlegen.package.dir}" template="${middlegen.templates}/seq-mybatis.vm" filename="dal/mybatis/MyBatisSeqDAO.java" />
 				-->
 				<!-- 为每一张表生成一个sqlmapping文件 -->
-				<fileproducer destination="${middlegen.destination}/resources" template="${middlegen.templates}/table-mapper.vm" filename="mybatis/${app.name}/{0}-mapper.xml" />
+				<fileproducer destination="${middlegen.destination}/resources" template="${middlegen.templates}/table-mapper.vm" filename="mybatis/${app.name}/${app.dbtype}/{0}-mapper.xml" />
 
 				<!-- 生成公共的sqlmapping文件 -->
 				<!--
@@ -89,7 +89,7 @@
 				-->
 				
 				<!-- 生成ibatis的配置文件 -->
-				<fileproducer destination="${middlegen.destination}/resources" template="${middlegen.templates}/mybatis-config.vm" filename="mybatis/mybatis-${app.name}-config.xml" />
+				<fileproducer destination="${middlegen.destination}/resources" template="${middlegen.templates}/mybatis-config.vm" filename="mybatis/mybatis-${app.name}-${app.dbtype}-config.xml" />
 				
 				<!-- 生成DAO beans的Spring配置文件 -->
 				<fileproducer destination="${middlegen.destination}/resources/META-INF/spring" template="${middlegen.templates}/beans-dal-dao.vm" filename="${app.name}-das-dao-auto.xml" />

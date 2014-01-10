@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import middlegen.plugins.iwallet.IWalletTable;
 import middlegen.plugins.iwallet.config.IWalletOperationConfig;
@@ -30,6 +31,7 @@ import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 
+import com.atom.dalgen.utils.CfgUtils;
 import com.atom.dalgen.utils.LogUtils;
 import com.atom.dalgen.utils.Utils;
 
@@ -283,17 +285,6 @@ public final class FileProducer {
 
     /**
      * Describe what the method does
-     * 
-     * @todo-javadoc Write javadocs for exception
-     * @todo-javadoc Write javadocs for method
-     * @todo-javadoc Write javadocs for method parameter
-     * @todo-javadoc Write javadocs for method parameter
-     * @param velocityEngine
-     *            Describe what the parameter does
-     * @param tableDecorator
-     *            Describe what the parameter does
-     * @exception MiddlegenException
-     *                Describe the exception
      */
     public void generateForTable(VelocityEngine velocityEngine, TableDecorator tableDecorator) throws MiddlegenException {
         // possibly use a deeper destination dir (typically for java classes)
@@ -414,15 +405,6 @@ public final class FileProducer {
     /**
      * @todo reuse FileProducers and introduce a generateForTable method and a
      *       generateForTables method.
-     * @todo-javadoc Write javadocs for method parameter
-     * @todo-javadoc Write javadocs for method parameter
-     * @todo-javadoc Write javadocs for exception
-     * @param velocityEngine
-     *            Describe what the parameter does
-     * @param outputFile
-     *            Describe what the parameter does
-     * @exception MiddlegenException
-     *                Describe the exception
      */
     private void generate(VelocityEngine velocityEngine, File outputFile) throws MiddlegenException {
         try {
@@ -458,21 +440,38 @@ public final class FileProducer {
 
             LogUtils.get().info("[文件生成]-文件[" + outputFile + "], 覆盖标志[" + this.justNew + "].");
 
+            String content = FileUtils.readFileToString(tempFile);
+            tempFile.delete();
+
+            Set<String> filterKeys = CfgUtils.findFilterKeys();
+            if (!filterKeys.isEmpty()) {
+                for (String key : filterKeys) {
+                    String fkey = CfgUtils.findValue(key);
+                    String fvalue = CfgUtils.findValue(key + ".value");
+
+                    LogUtils.get().info("[文件生成]-文件[{}]-FKey[{}]-FValue[{}].", outputFile, fkey, fvalue);
+
+                    if (StringUtils.contains(content, fkey)) {
+                        content = StringUtils.replace(content, fkey, fvalue);
+                    }
+                }
+            }
+
             if (!outputFile.exists()) {
                 outputFile.getParentFile().mkdirs();
-                FileUtils.copyFile(tempFile, outputFile);
+                // FileUtils.copyFile(tempFile, outputFile);
+                FileUtils.writeStringToFile(outputFile, content);
             } else if (!this.justNew) {
                 if (!DalUtil.contentEquals(tempFile, outputFile)) {
                     // 生成后执行校验
                     generateAfterValidate(tempFile, outputFile);
                     outputFile.delete();
-                    FileUtils.copyFile(tempFile, outputFile);
+                    // FileUtils.copyFile(tempFile, outputFile);
+                    FileUtils.writeStringToFile(outputFile, content);
                 }
-            } else {
-                LogUtils.get().info("[文件生成]-文件[" + outputFile + "]已经存在, 忽略生成.");
             }
-            
-            tempFile.delete();
+
+            LogUtils.get().info("[文件生成]-文件[" + outputFile + "]已经存在, 忽略生成.");
         } catch (IOException e) {
             LogUtils.get().error(e.getMessage(), e);
             throw new MiddlegenException(e.getMessage());

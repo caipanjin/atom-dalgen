@@ -8,8 +8,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -75,6 +77,18 @@ public final class CfgUtils {
         LogUtils.log("[系统参数]-查询系统参数, Key[" + key + "], Value[" + value + "].");
 
         return value;
+    }
+
+    public static final Set<String> findFilterKeys() {
+        Set<String> keys = new HashSet<String>();
+
+        for (String key : cfgs.keySet()) {
+            if (StringUtils.startsWithIgnoreCase(key, "filter.")) {
+                keys.add(key);
+            }
+        }
+
+        return keys;
     }
 
     // ~~~~~~~~~~~~~~ methods ~~~~~~~~~~~~~~ //

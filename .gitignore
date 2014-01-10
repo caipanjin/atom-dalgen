@@ -12,6 +12,7 @@
 /.settings
 
 /target
+/dalgen/logs
 /dalgen/target
 
 /resources/howto/*.log
