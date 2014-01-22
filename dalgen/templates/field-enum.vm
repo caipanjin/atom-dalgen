@@ -17,13 +17,13 @@ public enum ${table.baseClassName}FieldEnum implements EnumBase {
     //
     ;
 
-    /** 序号 */
+    /** Index */
     private final int    index;
     
-    /** 字段名称 */
+    /** FieldName */
     private final String field;
 	
-	/** 字段描述 */
+	/** Remark */
 	private final String remark;
 
     /**
@@ -36,7 +36,7 @@ public enum ${table.baseClassName}FieldEnum implements EnumBase {
     }
 
     /**
-     * 根据字段名获取枚举内容
+     * FindEnumByField
 	 */
     public static ${table.baseClassName}FieldEnum findByField(String field) {
         field = StringUtils.lowerCase(field);
@@ -54,7 +54,7 @@ public enum ${table.baseClassName}FieldEnum implements EnumBase {
     }
 
     /**
-     * 获取字段名称
+     * FindField
      */
     public String getField() {
         return this.field;

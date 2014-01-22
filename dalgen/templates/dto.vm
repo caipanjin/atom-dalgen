@@ -30,11 +30,11 @@ public class ${table.baseClassName}DTO extends BaseDTO {
 #end
 
 #if($table.valve)
-	/** 开关值 */
+	/** Valve */
 	private ${table.baseClassName}Valve valve;
 	
 	/**
-     * 获取开关值
+     * FetchValve
      */
     public ${table.baseClassName}Valve findValve() {
         if (this.valve == null) {
@@ -45,7 +45,7 @@ public class ${table.baseClassName}DTO extends BaseDTO {
     }
     
     /**
-     * 重置开关值
+     * ResetValve
      */
     public ${table.baseClassName}DTO resetValve() {
         this.valve = null;

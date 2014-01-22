@@ -13,16 +13,16 @@ import com.github.obullxl.lang.ToString;
 public abstract class BaseDTO extends ToString {
 	private static final long serialVersionUID = 2534171338675523870L;
 
-    /** 创建时间 */
+    /** CreateTime */
     protected Date                gmtCreate;
 
-    /** 修改时间 */
+    /** ModifyTime */
     protected Date                gmtModify;
 
-    /** 扩展数据 */
+    /** ExtData */
     protected Map<String, Object> extData          = new ConcurrentHashMap<String, Object>();
 
-    // ~~~~~~~~~~~ 扩展数据 ~~~~~~~~~~~ //
+    // ~~~~~~~~~~~ ExtData Functions ~~~~~~~~~~~ //
 
     @SuppressWarnings("unchecked")
     public <T> T findExtData(String key) {
