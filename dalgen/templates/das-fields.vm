@@ -1,0 +1,21 @@
+#parse("copyright.vm")
+package ${plugin.package}.das;
+
+/**
+ * A fields const object database.
+ */
+public interface DAS {
+
+#foreach ($table in $plugin.sortedTables)
+	//
+	public static interface $Utils.toUpperCaseWithUnderscores(${table.baseClassName}) {
+#foreach($column in $table.columns)
+#if ($column.simpleJavaType == "String")
+		//
+		public static final String $StringUtils.upperCase(${column.sqlName}) = "$StringUtils.lowerCase(${column.sqlName})";
+#end
+#end
+	}
+	
+#end
+}

@@ -7,6 +7,8 @@ package com.atom.dalgen.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import middlegen.plugins.iwallet.util.DalUtil;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -23,6 +25,9 @@ public final class Utils {
      */
     public static Map<String, Object> findUtils() {
         Map<String, Object> utils = new HashMap<String, Object>();
+
+        utils.put("Utils", new Utils());
+        utils.put("DalUtil", new DalUtil());
 
         utils.put("IOUtils", new IOUtils());
         utils.put("StringUtils", new StringUtils());
