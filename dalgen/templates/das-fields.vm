@@ -10,9 +10,11 @@ public interface DAS {
 	//
 	public static interface $Utils.toUpperCaseWithUnderscores(${table.baseClassName}) {
 #foreach($column in $table.columns)
-#if ($column.simpleJavaType == "String")
 		//
 		public static final String $StringUtils.upperCase(${column.sqlName}) = "$StringUtils.lowerCase(${column.sqlName})";
+#if ($column.simpleJavaType == "String")
+		//
+		public static final int $StringUtils.upperCase(${column.sqlName})_MAX = ${column.size};
 #end
 #end
 	}
