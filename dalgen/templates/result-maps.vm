@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RMS">
+    <!-- ============================================= -->
+    <!-- RESULT MAPS                                   -->
+    <!-- ============================================= -->
+    
+#foreach ($table in $plugin.sortedTables)
+    <!-- result maps for database table ${table.sqlName} -->
+#foreach ($resultMap in ${table.resultMaps})
+    <resultMap id="${resultMap.idAttr}" type="${table.baseClassName}DTO">
+#foreach ($result in ${resultMap.results})
+#if($StringUtils.startsWithIgnoreCase(${result.column}, "gmt_"))
+        <result property="${result.property}" column="${result.column}" javaType="java.util.Date" />
+#else
+        <result property="${result.property}" column="${result.column}" javaType="${result.javaType}" />
+#end
+#end
+    </resultMap>
+
+#end
+#end
+</mapper>

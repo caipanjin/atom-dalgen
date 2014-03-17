@@ -284,7 +284,7 @@ public class IWalletSelect extends IWalletOperation {
             String result = getReturnTypeOne();
 
             if (((IWalletTable) getTable()).getQualifiedDOClassName().equals(result)) {
-                return "resultMap=\"" + ((IWalletTable) getTable()).getResultMapId() + "\"";
+                return "resultMap=\"RMS." + ((IWalletTable) getTable()).getResultMapId() + "\"";
             } else if (IWalletPlugin.MONEY_CLASS.equals(result)) {
                 return "resultMap=\"" + IWalletPlugin.MONEY_RESULT_MAP_ID + "\"";
             } else {

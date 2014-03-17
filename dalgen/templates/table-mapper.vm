@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${table.namespace}">
-    <!-- ============================================= -->
-    <!-- RESULT MAPS                                   -->
-    <!-- ============================================= -->
-    
-##generate all other resultmaps
-    <!-- result maps for database table ${table.sqlName} -->
-#foreach ($resultMap in ${table.resultMaps})
-    <resultMap id="${resultMap.idAttr}" type="${table.baseClassName}DTO">
-#foreach ($result in ${resultMap.results})
-        <result property="${result.property}" column="${result.column}" javaType="${result.javaType}" />
-#end
-    </resultMap>
-
-#end
-
 	<!-- ============================================= -->
     <!-- Public SQLS                                   -->
     <!-- ============================================= -->

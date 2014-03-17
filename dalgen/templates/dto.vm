@@ -17,6 +17,8 @@ import $importClass;
 import ${table.package}.dal.valve.${table.baseClassName}Valve;
 #end
 
+import com.github.obullxl.lang.biz.BaseDTO;
+
 /**
  * A data object class directly models database table <tt>$table.sqlName</tt>.
  */

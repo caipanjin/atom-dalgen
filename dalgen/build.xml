@@ -89,6 +89,7 @@
 				-->
 				
 				<!-- 生成ibatis的配置文件 -->
+				<fileproducer destination="${middlegen.destination}/resources" template="${middlegen.templates}/result-map.vm" filename="mybatis/mybatis-${app.name}-result-maps.xml" />
 				<fileproducer destination="${middlegen.destination}/resources" template="${middlegen.templates}/mybatis-config.vm" filename="mybatis/mybatis-${app.name}-${app.dbtype}-config.xml" />
 				
 				<!-- 生成DAO beans的Spring配置文件 -->
