@@ -166,6 +166,12 @@ public class IWalletSelect extends IWalletOperation {
             return ((IWalletTable) getTable()).getQualifiedDOClassName();
         }
         */
+
+        String resultClass = opConfig.getResultClass();
+        if (StringUtils.isNotBlank(resultClass)) {
+            return resultClass;
+        }
+
         return super.getColumnType();
     }
 
@@ -178,14 +184,13 @@ public class IWalletSelect extends IWalletOperation {
         if (MULTIPLICITY_MANY.equals(multiplicity)) {
             if (isPaging()) {
                 return DEFAULT_MANY_RETURN_TYPE_PAGING;
-            } else {
-                //增加泛型类的导入 , modify by lejin , 2009.07.31
-                this.addImprotForGenericType();
-                return DEFAULT_MANY_RETURN_TYPE_NO_PAGING;
             }
-        } else {
-            return getReturnTypeOne();
+
+            this.addImprotForGenericType();
+            return DEFAULT_MANY_RETURN_TYPE_NO_PAGING;
         }
+
+        return getReturnTypeOne();
     }
 
     /**
@@ -233,11 +238,17 @@ public class IWalletSelect extends IWalletOperation {
                 itemType = "Long";
             } else if (StringUtils.equals(itemType, "int")) {
                 itemType = "Integer";
+            } else if (StringUtils.equals(itemType, "map")) {
+                itemType = "java.util.Map<String, Object>";
             } else {
                 itemType = DalUtil.getSimpleJavaType(itemType);
-
             }
+
             simpleReturnType += "<" + itemType + ">";
+        }
+
+        if (StringUtils.equals(simpleReturnType, "map")) {
+            simpleReturnType = "java.util.Map<String, Object>";
         }
 
         return simpleReturnType;

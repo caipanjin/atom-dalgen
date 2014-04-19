@@ -149,14 +149,6 @@ public class Sql2Java {
     * Gets the preferred Java Type for an SQL type. It has special logic for
     * handling DECIMAL and NUMERICs with zero decimal places to return the most
     * apppropriate type.
-    *
-    * @todo-javadoc Write javadocs for method parameter
-    * @todo-javadoc Write javadocs for method parameter
-    * @todo-javadoc Write javadocs for method parameter
-    * @param sqlType Describe what the parameter does
-    * @param size Describe what the parameter does
-    * @param decimalDigits Describe what the parameter does
-    * @return The PreferredJavaType value
     */
    public static String getPreferredJavaType(int sqlType, int size, int decimalDigits) {
       if ((sqlType == Types.DECIMAL || sqlType == Types.NUMERIC) && decimalDigits == 0) {
