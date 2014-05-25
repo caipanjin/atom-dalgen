@@ -11,11 +11,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  */
 public class IWalletParamConfig {
 
-    /** name of the param */
+    /** 参数名 */
     private String name;
 
-    /** java type of the param */
+    /** 参数类型 */
     private String javaType;
+
+    /** 泛型类型 */
+    private String genericType;
 
     /**
      * Constructor.
@@ -24,38 +27,35 @@ public class IWalletParamConfig {
         super();
     }
 
-    /**
-     * @return Returns the javaType.
-     */
-    public String getJavaType() {
-        return javaType;
-    }
-
-    /**
-     * @param javaType The javaType to set.
-     */
-    public void setJavaType(String javaType) {
-        this.javaType = javaType;
-    }
-
-    /**
-     * @return Returns the name.
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @param name The name to set.
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /* (non-Javadoc)
+    public String getJavaType() {
+        return javaType;
+    }
+
+    public void setJavaType(String javaType) {
+        this.javaType = javaType;
+    }
+
+    public String getGenericType() {
+        return genericType;
+    }
+
+    public void setGenericType(String genericType) {
+        this.genericType = genericType;
+    }
+
+    /**
      * @see java.lang.Object#toString()
      */
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
+
 }

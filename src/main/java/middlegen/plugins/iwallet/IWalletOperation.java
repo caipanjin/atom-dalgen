@@ -49,16 +49,14 @@ public abstract class IWalletOperation extends PreferenceAware implements Operat
     private Table                    table;
 
     /**
-     * a list of all method parameters, each one is an instance of
-     * IWalletParameter
+     * a list of all method parameters, each one is an instance of IWalletParameter
      */
-    protected List                   objectParams            = new ArrayList();
+    protected List<IWalletParameter> objectParams            = new ArrayList<IWalletParameter>();
 
     /**
-     * a list of all method parameters, each one is an instance of
-     * IWalletParameter
+     * a list of all method parameters, each one is an instance of IWalletParameter
      */
-    protected List                   primitiveParams         = new ArrayList();
+    protected List<IWalletParameter> primitiveParams         = new ArrayList<IWalletParameter>();
 
     /** the type of how to pass parameters to dao */
     protected String                 paramType;
@@ -412,11 +410,10 @@ public abstract class IWalletOperation extends PreferenceAware implements Operat
 
         // add additional parameters needed by extraparams
         if (!opConfig.getExtraParams().isEmpty()) {
-            for (Iterator i = opConfig.getExtraParams().iterator(); i.hasNext();) {
-                IWalletParamConfig paramConfig = (IWalletParamConfig) i.next();
-
+            for (IWalletParamConfig paramConfig : opConfig.getExtraParams()) {
                 param = new IWalletParameter(this, paramConfig.getName());
                 param.setJavaType(paramConfig.getJavaType());
+                param.setGenericType(paramConfig.getGenericType());
 
                 param.setPlugin(getPlugin());
 

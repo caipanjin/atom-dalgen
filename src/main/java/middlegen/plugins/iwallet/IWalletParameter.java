@@ -28,6 +28,9 @@ public class IWalletParameter extends PreferenceAware implements Parameter {
     /** the qualified java type of the parameter */
     private String             javaType;
 
+    /** 泛型类型 */
+    private String             genericType;
+
     /** an instance of an IWalletOperation */
     private IWalletOperation   operation;
     private String             suffix;
@@ -183,6 +186,14 @@ public class IWalletParameter extends PreferenceAware implements Parameter {
      */
     public void setJavaType(String javaType) {
         this.javaType = javaType;
+    }
+
+    public String getGenericType() {
+        return genericType;
+    }
+
+    public void setGenericType(String genericType) {
+        this.genericType = genericType;
     }
 
     /**

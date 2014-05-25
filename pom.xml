@@ -4,7 +4,7 @@
 	<artifactId>atom-dalgen</artifactId>
 	<name>atom-dalgen</name>
 	<packaging>jar</packaging>
-	<version>1.1.5</version>
+	<version>1.1.6</version>
 	<description>atom-dalgen</description>
 
 	<properties>

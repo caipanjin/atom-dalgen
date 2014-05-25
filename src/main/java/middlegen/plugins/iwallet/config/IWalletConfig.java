@@ -187,6 +187,7 @@ public class IWalletConfig {
                 digester.addObjectCreate("table/operation/extraparams/param", IWalletParamConfig.class);
                 digester.addSetProperties("table/operation/extraparams/param", "name", "name");
                 digester.addSetProperties("table/operation/extraparams/param", "javatype", "javaType");
+                digester.addSetProperties("table/operation/extraparams/param", "generictype", "genericType");
                 digester.addSetNext("table/operation/extraparams/param", "addExtraParam");
 
                 digester.addCallMethod("table/operation/sql", "setSql", 0);
