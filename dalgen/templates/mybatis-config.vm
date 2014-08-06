@@ -9,6 +9,7 @@
 
 	<mappers>
 		<mapper resource="mybatis/mybatis-${CfgUtils.findValue("app.name")}-result-maps.xml" />
+		<mapper resource="mybatis/mybatis-${CfgUtils.findValue("app.name")}-manual-maps.xml" />
 #foreach ($table in $plugin.sortedTables)
 		<mapper resource="mybatis/${CfgUtils.findValue("app.name")}/${CfgUtils.findValue("app.dbtype")}/${table.baseClassName}-mapper.xml" />
 #end
